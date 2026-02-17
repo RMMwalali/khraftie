@@ -86,29 +86,18 @@ async function syncContent() {
   }
   
   if (hasChanges) {
-    console.log('Content updated! Triggering build...');
-    await buildAndDeploy();
+    console.log('Content updated! Build will be triggered.');
   } else {
     console.log('No content changes found.');
   }
-}
-
-async function buildAndDeploy() {
-  const { exec } = require('child_process');
   
-  exec('npm run build', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Build error: ${error}`);
-      return;
-    }
-    
-    console.log('Build completed!');
-    console.log('Ready to deploy to cPanel');
-    
-    // You can add automatic FTP deployment here
-    // deployToFtp();
-  });
+  return hasChanges;
 }
 
-// Run sync
-syncContent();
+// Export for use in other scripts
+module.exports = { syncContent };
+
+// Run if called directly
+if (require.main === module) {
+  syncContent();
+}
