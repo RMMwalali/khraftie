@@ -1,0 +1,34 @@
+{
+  "title": "Tailored Experiences for Maximum Impact",
+  "tabs": [
+    {
+      "heading": "Mall Activations",
+      "content": "Immersive in-mall experiences that spark interaction, increase dwell time, and elevate shopper journeys. From interactive installations to themed setups, we create activations that captivate.",
+      "svg": "tools",
+      "src": "/uploads/creative.png",
+      "alt": "Interactive mall activation with shoppers engaging",
+      "width": 1024,
+      "height": 1280,
+      "first": true
+    },
+    {
+      "heading": "Living Statues",
+      "content": "Professionally styled performers who become high-impact living visuals. Our human living statues create curiosity, buzz, and shareable moments that draw crowds and elevate brand presence.",
+      "svg": "dashboard",
+      "src": "/uploads/coordination.jpg",
+      "alt": "Human living statue performance at event",
+      "width": 1080,
+      "height": 1293,
+      "second": true
+    },
+    {
+      "heading": "Brand Engagement",
+      "content": "Human-led, participatory experiences that create meaningful connections between shoppers and brands. From brand ambassadors to interactive challenges, we drive engagement and brand loyalty.",
+      "svg": "house",
+      "src": "/uploads/execution.jpg",
+      "alt": "Brand ambassadors engaging with shoppers",
+      "width": 1080,
+      "height": 1350
+    }
+  ]
+}

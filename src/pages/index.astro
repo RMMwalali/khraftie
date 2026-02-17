@@ -1,0 +1,50 @@
+---
+// Import the necessary components
+import MainLayout from "@/layouts/MainLayout.astro";
+import HeroSection from "@components/sections/landing/HeroSection.astro";
+import HeroSectionAlt from "@components/sections/landing/HeroSectionAlt.astro";
+import ClientsSection from "@components/sections/landing/ClientsSection.astro";
+import FeaturesGeneral from "@components/sections/features/FeaturesGeneral.astro";
+import FeaturesNavs from "@components/sections/features/FeaturesNavs.astro";
+import TestimonialsSection from "@components/sections/testimonials/TestimonialsSection.astro";
+import FAQ from "@components/sections/misc/FAQ.astro";
+import livingstatues from "@images/livingstatues.jpg";
+import { getHeroContent } from "../lib/cosmic.js";
+import { getClientsContent } from "../lib/cosmic.js";
+import { getFeaturesGeneralContent } from "../lib/cosmic.js";
+import { getFeaturesTabsContent } from "../lib/cosmic.js";
+import { getTestimonialsContent } from "../lib/cosmic.js";
+import { getFAQContent } from "../lib/cosmic.js";
+import { getCTAContent } from "../lib/cosmic.js";
+
+// Fetch content from Cosmic (with JSON fallback)
+const heroContent = await getHeroContent();
+const clientsContent = await getClientsContent();
+const featuresGeneralContent = await getFeaturesGeneralContent();
+const featuresTabsContent = await getFeaturesTabsContent();
+const testimonialsContent = await getTestimonialsContent();
+const faqContent = await getFAQContent();
+const ctaContent = await getCTAContent();
+---
+
+<MainLayout>
+  <HeroSection {...heroContent} />
+
+  <ClientsSection {...clientsContent} />
+
+  <FeaturesGeneral
+    title={featuresGeneralContent.title}
+    subTitle={featuresGeneralContent.subTitle}
+    src={livingstatues}
+    alt={featuresGeneralContent.imageAlt}
+    features={featuresGeneralContent.features}
+  />
+
+  <FeaturesNavs {...featuresTabsContent} />
+
+  <TestimonialsSection {...testimonialsContent} />
+
+  <FAQ {...faqContent} />
+
+  <HeroSectionAlt {...ctaContent} />
+</MainLayout>

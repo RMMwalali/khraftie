@@ -1,0 +1,28 @@
+{
+  "title": "Frequently<br />asked questions",
+  "faqs": {
+    "subTitle": "Ask us anything about our experiential activations and services, and get clear, honest answers.",
+    "faqs": [
+      {
+        "question": "What does StillCraft Events specialize in?",
+        "answer": "StillCraft Events specializes in experiential activations for malls and corporate brands. Our services include immersive mall activations, human living statues, interactive brand engagements, seasonal campaigns, entertainment curation, and end-to-end concept design and execution—including tenant shop launches. We create experiences that engage shoppers, drive footfall, and elevate brand presence."
+      },
+      {
+        "question": "Do you work with shopping malls only, or can brands hire you directly?",
+        "answer": "We work with both shopping malls and corporate brands directly. For malls, we create activations that drive footfall and enhance the shopper journey. For brands, we deliver experiential campaigns that connect with audiences and amplify brand presence. Whether you're a mall management team or a brand looking to activate, we tailor our services to your needs."
+      },
+      {
+        "question": "What is a human living statue and how can it benefit my activation?",
+        "answer": "Human living statues are professionally styled performers who become high-impact living visuals. They create curiosity, buzz, and shareable moments that draw crowds and elevate brand presence. Perfect for mall activations, product launches, and brand experiences, our living statues captivate audiences and transform ordinary spaces into extraordinary experiences."
+      },
+      {
+        "question": "Can you handle end-to-end activation from concept to execution?",
+        "answer": "Absolutely. We offer comprehensive experiential concept design and execution services. This includes experience ideation, visual storytelling, on-ground execution, and professional supervision. For tenant shop launches and in-mall brand openings, we handle everything from shop opening concepts to storefront activations and launch-day engagement."
+      },
+      {
+        "question": "How far in advance should we book your services?",
+        "answer": "For standard activations, we recommend booking 4-6 weeks in advance to ensure proper planning and execution. For larger seasonal campaigns or complex experiential setups, 8-12 weeks is ideal. However, we understand sometimes opportunities arise quickly, so contact us even if your timeline is tight—we'll do our best to accommodate your needs."
+      }
+    ]
+  }
+}

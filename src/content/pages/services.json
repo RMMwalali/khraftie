@@ -1,0 +1,93 @@
+{
+  "mainSectionTitle": "Experiential services designed for impact.",
+  "mainSectionSubTitle": "We specialize in experiences that capture attention and deliver results. From immersive mall activations and human living statues to interactive brand engagements, seasonal campaigns, curated live talent, and concept-to-execution services—including tenant shop launches—we create experiences that resonate with shoppers and elevate brand presence, all executed with creativity and professionalism.",
+  "mainSectionBtnExists": true,
+  "mainSectionBtnTitle": "Request a Proposal",
+  "mainSectionBtnURL": "/contact",
+  "servicesIntro": "Our comprehensive experiential services include:",
+  "services": [
+    {
+      "isRightSection": false,
+      "title": "Science Safari",
+      "subTitle": "A premium, guided mall-based STEM experience designed to transform children's curiosity into an exciting journey of discovery. Tailored for kids aged 5–15, the activation blends hands-on experiments, creative building challenges, and interactive learning zones in a safe, engaging, and visually immersive setup.",
+      "single": true,
+      "img": "/src/images/sciencesafari.png",
+      "imgAlt": "Science Safari logo - Discover Play Learn"
+    },
+    {
+      "isRightSection": true,
+      "title": "Experiential Mall Activations",
+      "subTitle": "Immersive in-mall experiences that spark interaction, increase dwell time, and elevate shopper journeys. Includes interactive installations, walk-through experiences, themed experiential setups, shopper engagement touchpoints, and campaign & seasonal activations.",
+      "single": true,
+      "imgOne": "/src/images/livingstatues.jpg",
+      "imgOneAlt": "Mall activation with interactive installation"
+    },
+    {
+      "isRightSection": false,
+      "title": "Human Living Statues & Living Billboards",
+      "subTitle": "Professionally styled performers who become high-impact living visuals, creating curiosity, buzz, and shareable moments. Includes living statues, living billboards, visual storytelling, and crowd pullers & wayfinding moments.",
+      "single": true,
+      "img": "/src/images/livingstatues.jpg",
+      "imgAlt": "Human living statue performing at mall activation",
+      "btnExists": true,
+      "btnTitle": "Learn More",
+      "btnURL": "/insights/living-statues/"
+    },
+    {
+      "isRightSection": true,
+      "title": "Interactive Brand Engagement",
+      "subTitle": "Human-led, participatory experiences that create meaningful connections between shoppers and brands. Sub-services include Brand Ambassadors (BAs), guided brand storytelling, interactive challenges & gamified experiences, and experiential sampling.",
+      "single": true,
+      "imgOne": "/src/images/brandambassador.png",
+      "imgOneAlt": "Brand ambassadors engaging with shoppers"
+    },
+    {
+      "isRightSection": false,
+      "title": "Seasonal & Calendar-Based Mall Campaigns",
+      "subTitle": "Experiential activations aligned to key retail and cultural moments, designed to create buzz, increase footfall, and strengthen the mall experience. Includes Valentine's activations, Easter experiences, Mother's & Father's Day campaigns, Back-to-School activations, and festive & cultural seasonal campaigns.",
+      "single": true,
+      "img": "/src/images/creativeconcept.png",
+      "imgAlt": "Seasonal mall campaign activation",
+      "btnExists": true,
+      "btnTitle": "Contact Us",
+      "btnURL": "/contact"
+    },
+    {
+      "isRightSection": true,
+      "title": "Experiential Entertainment Curation",
+      "subTitle": "Live talent and entertainment carefully selected to complement experiences and elevate atmosphere. Sub-services include live musicians, themed performers, movement artists, character performers, and talent booking & coordination.",
+      "single": true,
+      "imgOne": "/src/images/equipmentHire.png",
+      "imgOneAlt": "Live entertainment at mall activation"
+    },
+    {
+      "isRightSection": false,
+      "title": "Experiential Concept Design & Execution",
+      "subTitle": "End-to-end service for creating and executing experiences that engage shoppers, amplify brand presence, and deliver results. Includes experience ideation, visual storytelling, on-ground execution, and professional supervision.",
+      "single": true,
+      "img": "/src/images/eventplanning.jpg",
+      "imgAlt": "Experiential concept design and execution",
+      "btnExists": true,
+      "btnTitle": "Request a Proposal",
+      "btnURL": "/contact"
+    }
+  ],
+  "statsTitle": "Our Impact in Numbers",
+  "statsSubTitle": "StillCraft Events creates unforgettable experiences that deliver measurable results for malls and brands.",
+  "mainStatTitle": "96%",
+  "mainStatSubTitle": "of our clients would recommend us to their friends and colleagues",
+  "stats": [
+    {
+      "stat": "99.8%",
+      "description": "of activations executed seamlessly"
+    },
+    {
+      "stat": "120+",
+      "description": "memorable experiences planned and delivered"
+    },
+    {
+      "stat": "85%",
+      "description": "client return rate year after year"
+    }
+  ]
+}

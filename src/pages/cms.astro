@@ -1,0 +1,244 @@
+---
+// export const prerender = false;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StillCraft CMS</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #edeff5;
+      }
+
+      #nc-root {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="nc-root"></div>
+
+    <script is:inline>
+      // Always manual init on /cms route to avoid fetching any config.yml
+      window.CMS_MANUAL_INIT = true;
+    </script>
+    <script is:inline>
+      // Dynamically load Decap CMS and initialize only after it finishes loading
+      (function loadDecap() {
+        const el = document.createElement('script');
+        el.src = 'https://unpkg.com/decap-cms@^3.3.0/dist/decap-cms.js';
+        el.onload = () => initCMS();
+        document.body.appendChild(el);
+      })();
+
+      function initCMS() {
+        CMS.init({
+          load_config_file: false,
+          backend: { name: 'local-backend', local_backend: true },
+          publish_mode: 'editorial_workflow',
+          media_folder: "src/images",
+          public_folder: "/src/images",
+          media_folder_relative: true,
+          collections: [
+            {
+              name: "blog_en",
+              label: "Blog (EN)",
+              folder: "src/content/blog/en",
+              create: true,
+              slug: "{{slug}}",
+              extension: "md",
+              format: "frontmatter",
+              fields: [
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Description", name: "description", widget: "text" },
+                { label: "Contents", name: "contents", widget: "list" },
+                { label: "Author", name: "author", widget: "string" },
+                { label: "Role", name: "role", widget: "string", required: false },
+                { label: "Author Image", name: "authorImage", widget: "image" },
+                { label: "Author Image Alt", name: "authorImageAlt", widget: "string" },
+                { label: "Publish Date", name: "pubDate", widget: "date", format: "YYYY-MM-DD" },
+                { label: "Card Image", name: "cardImage", widget: "image" },
+                { label: "Card Image Alt", name: "cardImageAlt", widget: "string" },
+                { label: "Read Time (min)", name: "readTime", widget: "number", value_type: "int", min: 1 },
+                { label: "Tags", name: "tags", widget: "list", required: false }
+              ]
+            },
+            {
+              name: "insights_en",
+              label: "Insights (EN)",
+              folder: "src/content/insights/en",
+              create: true,
+              slug: "{{slug}}",
+              extension: "md",
+              format: "frontmatter",
+              fields: [
+                { label: "Title", name: "title", widget: "string" },
+                { label: "Description", name: "description", widget: "text" },
+                { label: "Card Image", name: "cardImage", widget: "image" },
+                { label: "Card Image Alt", name: "cardImageAlt", widget: "string" }
+              ]
+            },
+            {
+              name: "homepage",
+              label: "Homepage",
+              files: [
+                {
+                  label: "Hero Section",
+                  name: "hero",
+                  file: "src/content/homepage/hero.json",
+                  fields: [
+                    { label: "Title", name: "title", widget: "string" },
+                    { label: "Subtitle", name: "subTitle", widget: "text" },
+                    { label: "Primary Button Text", name: "primaryBtn", widget: "string" },
+                    { label: "Primary Button URL", name: "primaryBtnURL", widget: "string" },
+                    { label: "Secondary Button Text", name: "secondaryBtn", widget: "string", required: false },
+                    { label: "Secondary Button URL", name: "secondaryBtnURL", widget: "string", required: false },
+                    { label: "Show Reviews", name: "withReview", widget: "boolean", default: false, required: false },
+                    { label: "Video Source", name: "videoSrc", widget: "string" },
+                    { label: "Video Type", name: "videoType", widget: "string", default: "video/mp4" },
+                    { label: "Video Alt Text", name: "alt", widget: "string" }
+                  ]
+                },
+                {
+                  label: "Clients Carousel",
+                  name: "clients",
+                  file: "src/content/homepage/clients.json",
+                  fields: [
+                    { label: "Title", name: "title", widget: "string" },
+                    { label: "Subtitle", name: "subTitle", widget: "text" },
+                    {
+                      label: "Partners",
+                      name: "partners",
+                      widget: "list",
+                      fields: [
+                        { label: "Partner Name", name: "name", widget: "string", required: false },
+                        { label: "Logo / Image", name: "icon", widget: "image" },
+                        { label: "Link", name: "href", widget: "string", required: false }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  label: "Features Intro",
+                  name: "features_general",
+                  file: "src/content/homepage/features-general.json",
+                  fields: [
+                    { label: "Title", name: "title", widget: "string" },
+                    { label: "Subtitle", name: "subTitle", widget: "text" },
+                    { label: "Feature Image", name: "image", widget: "image" },
+                    { label: "Image Alt Text", name: "imageAlt", widget: "string" },
+                    {
+                      label: "Feature Cards",
+                      name: "features",
+                      widget: "list",
+                      fields: [
+                        { label: "Heading", name: "heading", widget: "string" },
+                        { label: "Content", name: "content", widget: "text" },
+                        { label: "Icon", name: "svg", widget: "string" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  label: "Features Tabs",
+                  name: "features_tabs",
+                  file: "src/content/homepage/features-tabs.json",
+                  fields: [
+                    { label: "Title", name: "title", widget: "string" },
+                    {
+                      label: "Tabs",
+                      name: "tabs",
+                      widget: "list",
+                      fields: [
+                        { label: "Heading", name: "heading", widget: "string" },
+                        { label: "Content", name: "content", widget: "text" },
+                        { label: "Icon", name: "svg", widget: "string" },
+                        { label: "Image", name: "src", widget: "image" },
+                        { label: "Image Alt", name: "alt", widget: "string" },
+                        { label: "Default (First Tab)", name: "first", widget: "boolean", required: false },
+                        { label: "Alternate Style", name: "second", widget: "boolean", required: false }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  label: "Testimonials",
+                  name: "testimonials",
+                  file: "src/content/homepage/testimonials.json",
+                  fields: [
+                    { label: "Title", name: "title", widget: "string" },
+                    { label: "Subtitle", name: "subTitle", widget: "text" },
+                    {
+                      label: "Testimonials",
+                      name: "testimonials",
+                      widget: "list",
+                      fields: [
+                        { label: "Quote", name: "content", widget: "text" },
+                        { label: "Author", name: "author", widget: "string" },
+                        { label: "Role", name: "role", widget: "string" },
+                        { label: "Avatar", name: "avatarSrc", widget: "image" }
+                      ]
+                    },
+                    {
+                      label: "Statistics",
+                      name: "statistics",
+                      widget: "list",
+                      fields: [
+                        { label: "Count", name: "count", widget: "string" },
+                        { label: "Description", name: "description", widget: "string" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  label: "FAQ",
+                  name: "faq",
+                  file: "src/content/homepage/faq.json",
+                  fields: [
+                    { label: "Title", name: "title", widget: "string" },
+                    {
+                      label: "FAQ Group",
+                      name: "faqs",
+                      widget: "object",
+                      fields: [
+                        { label: "Subtitle", name: "subTitle", widget: "text" },
+                        {
+                          label: "Questions",
+                          name: "faqs",
+                          widget: "list",
+                          fields: [
+                            { label: "Question", name: "question", widget: "string" },
+                            { label: "Answer", name: "answer", widget: "text" }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  label: "Call To Action",
+                  name: "cta",
+                  file: "src/content/homepage/cta.json",
+                  fields: [
+                    { label: "Title", name: "title", widget: "string" },
+                    { label: "Subtitle", name: "subTitle", widget: "text" },
+                    { label: "Button Label", name: "buttonLabel", widget: "string" },
+                    { label: "Button URL", name: "url", widget: "string" }
+                  ]
+                }
+              ]
+            }
+          ]
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+{
+  "subTitle": "Ask us anything about our brand and services, and get clear, honest answers.",
+  "faqs": [
+    {
+      "question": "What does StillCraft Events specialize in?",
+      "answer": "StillCraft Events is a full-service event planning company that specializes in curating unforgettable experiences for corporate gatherings, weddings, social parties, and large-scale events. We handle everything from conceptualization and venue selection to decor, entertainment, catering, and logistics, ensuring a seamless and stress-free experience for our clients."
+    },
+    {
+      "question": "Do you only handle large events, or can I hire you for a small gathering?",
+      "answer": "We cater to events of all sizes! Whether it's an intimate birthday dinner for 10 guests or a large corporate gala with over 1,000 attendees, our team ensures that every detail is meticulously planned to match your vision and budget."
+    },
+    {
+      "question": "Can I customize my event package?",
+      "answer": "Absolutely! We offer customizable event packages tailored to your specific needs and preferences. From selecting the perfect venue to choosing decor styles, catering options, and entertainment, our team works closely with you to bring your vision to life."
+    },
+    {
+      "question": "Do you provide event rentals, or do I need to source my own decor and furniture?",
+      "answer": "StillCraft Events provides a wide range of event rentals, including furniture, tents, lighting, sound systems, tableware, and decor. If you have specific pieces in mind, we can also source them through our trusted vendors."
+    },
+    {
+      "question": "What types of venues do you work with?",
+      "answer": "We have partnerships with a variety of venues, from luxury hotels and rooftop spaces to outdoor gardens and private estates. Whether you want an elegant ballroom or a beachfront setup, we can secure the perfect location for your event."
+    },
+    {
+      "question": "How far in advance should I book your services?",
+      "answer": "We recommend booking as early as possible, especially for large-scale events or peak-season dates. Ideally, corporate events should be booked at least 3-6 months in advance, while weddings and major celebrations should be planned 6-12 months ahead."
+    },
+    {
+      "question": "Do you offer last-minute event planning services?",
+      "answer": "Yes! While we recommend booking in advance for the best experience, we understand that sometimes events need to be planned on short notice. Depending on availability, our team can work efficiently to organize a high-quality event in a short timeframe."
+    },
+    {
+      "question": "Do you handle vendor coordination, or do I need to find my own caterers, photographers, and entertainers?",
+      "answer": "We take care of all vendor coordination for you! We have a network of trusted caterers, photographers, DJs, florists, and other event professionals to ensure a smooth planning process. If you have preferred vendors, we’re happy to collaborate with them as well."
+    },
+    {
+      "question": "What makes StillCraft Events different from other event planners?",
+      "answer": "Our team is dedicated to providing a personalized, stress-free experience with meticulous attention to detail. We combine creativity, expertise, and strong vendor partnerships to deliver unique and flawlessly executed events. Our goal is to bring your vision to life while handling every logistical aspect behind the scenes."
+    },
+    {
+      "question": "Do you offer event planning for businesses and corporate functions?",
+      "answer": "Yes! We specialize in corporate event planning, including conferences, product launches, team-building retreats, and award ceremonies. We ensure that your business objectives align with an impactful and well-organized event."
+    },
+    {
+      "question": "How do I get started with booking StillCraft Events?",
+      "answer": "Getting started is easy! Simply reach out to us via our website, email, or phone to schedule an initial consultation. We’ll discuss your event details, goals, and budget, and then provide a customized proposal to get the planning started."
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "pageTitle": "Request a Proposal",
+  "title": "Let's create unforgettable experiences together.",
+  "subTitle": "Whether it's a mall activation, corporate campaign, or tenant launch, our team designs and executes experiences that engage shoppers, amplify brand presence, and leave a lasting impression. Reach out to discuss your next activation.",
+  "formTitle": "Request a Proposal",
+  "formFields": [
+    {
+      "label": "Mall / Brand Name",
+      "type": "text",
+      "required": true,
+      "placeholder": "Your mall or brand name"
+    },
+    {
+      "label": "Activation Type",
+      "type": "select",
+      "required": true,
+      "options": [
+        "Experiential Mall Activation",
+        "Human Living Statues",
+        "Interactive Brand Engagement",
+        "Seasonal Campaign",
+        "Entertainment Curation",
+        "Concept Design & Execution",
+        "Tenant Shop Launch",
+        "Other"
+      ]
+    },
+    {
+      "label": "Timeline",
+      "type": "text",
+      "required": true,
+      "placeholder": "When do you need this activation?"
+    },
+    {
+      "label": "Budget Range",
+      "type": "select",
+      "required": false,
+      "options": [
+        "Under KES 100,000",
+        "KES 100,000 - 500,000",
+        "KES 500,000 - 1,000,000",
+        "KES 1,000,000+",
+        "Prefer to discuss"
+      ]
+    },
+    {
+      "label": "Contact Information",
+      "type": "textarea",
+      "required": true,
+      "placeholder": "Your name, email, phone number, and any additional details about your activation..."
+    }
+  ],
+  "submitButton": "Book a Consultation",
+  "contactInfoTitle": "Contact Information",
+  "contactInfo": [
+    {
+      "icon": "phone",
+      "label": "Phone",
+      "value": "+254 792 234 337"
+    },
+    {
+      "icon": "email",
+      "label": "Email",
+      "value": "info@stillcraftevents.co.ke"
+    },
+    {
+      "icon": "location",
+      "label": "Address",
+      "value": "Nairobi, Kenya"
+    }
+  ],
+  "socialTitle": "Follow Us",
+  "socialLinks": [
+    {
+      "platform": "instagram",
+      "url": "https://instagram.com/stillcraftevents"
+    },
+    {
+      "platform": "facebook",
+      "url": "https://facebook.com/stillcraftevents"
+    },
+    {
+      "platform": "linkedin",
+      "url": "https://linkedin.com/company/stillcraftevents"
+    }
+  ]
+}

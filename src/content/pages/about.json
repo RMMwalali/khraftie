@@ -1,0 +1,39 @@
+{
+  "title": "Where creativity meets precision.",
+  "subTitle": "For over eight years, StillCraft Events has partnered with malls and corporates to craft unique experiential activations that drive footfall, engage shoppers, and strengthen brand presence. Our approach blends imaginative concepts with flawless execution, delivering experiences that people remember and brands value.",
+  "ctaText": "Talk to Our Team",
+  "ctaUrl": "/contact",
+  "galleryTitle": "Our Gallery",
+  "featuresTitle": "Why Choose StillCraft Events?",
+  "featuresSubTitle": "We combine creativity, strategy, and flawless execution to deliver experiential activations that captivate audiences and elevate brands.",
+  "featuresBenefits": [
+    "Expertise in mall activations and corporate experiential campaigns",
+    "Signature human living statues and interactive brand engagements",
+    "End-to-end concept design and professional execution",
+    "Proven track record with leading malls and global brands"
+  ],
+  "testimonialsTitle": "What Our Clients Say",
+  "testimonials": [
+    {
+      "content": "StillCraft Events transformed our mall activation into an unforgettable experience. Their human living statues drew massive crowds and created incredible buzz for our brand.",
+      "author": "Marketing Director",
+      "role": "Leading Retail Brand | Nairobi",
+      "avatarSrc": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743424839/image-3_yaaqy7.png",
+      "avatarAlt": "Client testimonial avatar"
+    },
+    {
+      "content": "The level of creativity and professionalism StillCraft brings to every activation is unmatched. They've become our go-to partner for all experiential campaigns.",
+      "author": "Events Manager",
+      "role": "Premium Shopping Mall | Kenya",
+      "avatarSrc": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743424839/image-4_j7lsqi.png",
+      "avatarAlt": "Client testimonial avatar"
+    },
+    {
+      "content": "From concept to execution, StillCraft delivered beyond our expectations. The footfall and engagement we achieved exceeded all our targets.",
+      "author": "Brand Manager",
+      "role": "Corporate Client | East Africa",
+      "avatarSrc": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743424839/image-2_bewhie.png",
+      "avatarAlt": "Client testimonial avatar"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Experiences That Elevate Brands",
+  "subTitle": "We specialize in creating immersive activations that capture attention, drive footfall, and deliver measurable results for malls and corporate brands.",
+  "image": "/src/images/livingstatues.jpg",
+  "imageAlt": "Experiential mall activation with human living statues",
+  "features": [
+    {
+      "heading": "Immersive Activations",
+      "content": "From interactive installations to walk-through experiences, we design activations that spark curiosity and increase dwell time.",
+      "svg": "groups"
+    },
+    {
+      "heading": "Living Statues & Performers",
+      "content": "Our signature human living statues and living billboards create high-impact visuals that generate buzz and shareable moments.",
+      "svg": "verified"
+    },
+    {
+      "heading": "Brand Engagement",
+      "content": "Human-led, participatory experiences that create meaningful connections between shoppers and your brand.",
+      "svg": "books"
+    },
+    {
+      "heading": "End-to-End Execution",
+      "content": "From concept design to on-ground execution, we handle every detail with creativity and professional supervision.",
+      "svg": "frame"
+    }
+  ]
+}

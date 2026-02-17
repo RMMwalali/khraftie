@@ -1,0 +1,46 @@
+---
+// Import the necessary components
+import MainLayout from "@/layouts/MainLayout.astro";
+import ContactSection from "@components/sections/misc/ContactSection.astro";
+import { SITE } from "@data/constants";
+
+// Import Cosmic content function
+import { getContactContent } from "../lib/cosmic.js";
+
+// Fetch content from Cosmic (with JSON fallback)
+const contactContent = await getContactContent();
+
+const pageTitle: string = `${contactContent.pageTitle} | ${SITE.title}`;
+---
+
+<!--Utilizing MainLayout for the outer layout of the page, and defining meta for SEO purposes-->
+<MainLayout
+  title={pageTitle}
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "http://stillcraft-events.irentlist.website/contact",
+    url: "http://stillcraft-events.irentlist.website/contact",
+    name: "Contact Us | StillCraft Events",
+    description:
+      "StillCraft Events is all about creating unforgettable experiences, and the numbers speak for themselves.",
+    isPartOf: {
+      "@type": "WebSite",
+      url: "http://stillcraft-events.irentlist.website",
+      name: "StillCraft Events",
+      description:
+        "From flawless event execution to happy clients, we’re proud of the milepurples we’ve achieved.",
+    },
+    inLanguage: "en-US",
+  }}
+>
+  <ContactSection 
+    title={contactContent.title}
+    subTitle={contactContent.subTitle}
+    formTitle={contactContent.formTitle}
+    formSubTitle={contactContent.formSubTitle}
+    phoneNumber={contactContent.contactInfo.find((info: any) => info.label === "Phone")?.value || "+254792234337"}
+    email={contactContent.contactInfo.find((info: any) => info.label === "Email")?.value || "info@stillcraftevents.co.ke"}
+    address={contactContent.contactInfo.find((info: any) => info.label === "Address")?.value || "671 Ngong Rd, Nairobi"}
+  />
+</MainLayout>
