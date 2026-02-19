@@ -7,6 +7,8 @@ import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import { SITE } from "@data/constants";
 
+export const prerender = true;
+
 // Global declaration for gsap animation library
 declare global {
   interface Window {
@@ -30,6 +32,11 @@ export async function getStaticPaths() {
 }
 
 const { product } = Astro.props;
+
+// Safety check for product data
+if (!product) {
+  throw new Error(`Product not found`);
+}
 
 const pageTitle: string = `${product.data.title} | ${SITE.title}`;
 ---

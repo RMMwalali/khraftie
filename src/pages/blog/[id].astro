@@ -12,6 +12,8 @@ import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
 
+export const prerender = true;
+
 // Update getStaticPaths for English posts
 export async function getStaticPaths() {
   const blogPosts = await getCollection("blog", ({ id }) =>
@@ -28,6 +30,11 @@ export async function getStaticPaths() {
 
 // Get the current post's data
 const { post } = Astro.props;
+
+// Safety check for post data
+if (!post) {
+  throw new Error(`Blog post not found`);
+}
 
 const blogPosts: CollectionEntry<"blog">[] = await getCollection(
   "blog",
