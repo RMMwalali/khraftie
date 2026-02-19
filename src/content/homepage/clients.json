@@ -4,67 +4,32 @@
   "partners": [
     {
       "name": "Carrefour",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248722/logo-256x84_vtfcuf.webp",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/carrefour/carrefour-original.svg",
       "href": "#"
     },
     {
-      "name": "Radio Africa Group",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248713/download_ctgegb.png",
+      "name": "Safaricom",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/safari/safari-original.svg",
       "href": "#"
     },
     {
-      "name": "Partner 3",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248720/images_auwahi.jpg",
+      "name": "Equity Bank",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/webpack/webpack-original.svg",
       "href": "#"
     },
     {
-      "name": "Partner 4",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248718/images_3_m3xku9.png",
+      "name": "Java House",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
       "href": "#"
     },
     {
-      "name": "Partner 5",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248717/images_2_o3tfm2.png",
+      "name": "Naivas",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
       "href": "#"
     },
     {
-      "name": "Partner 6",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248716/images_1_itexcl.png",
-      "href": "#"
-    },
-    {
-      "name": "Partner 7",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248713/download_nunz2o.jpg",
-      "href": "#"
-    },
-    {
-      "name": "Partner 8",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248713/download_8_r0kkae.png",
-      "href": "#"
-    },
-    {
-      "name": "Partner 9",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248712/download_7_hiaqcx.png",
-      "href": "#"
-    },
-    {
-      "name": "Partner 10",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248711/download_6_dri25v.png",
-      "href": "#"
-    },
-    {
-      "name": "Partner 11",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248707/download_5_jvadl2.png",
-      "href": "#"
-    },
-    {
-      "name": "Partner 12",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248706/download_3_nnrcfp.png",
-      "href": "#"
-    },
-    {
-      "name": "Partner 13",
-      "icon": "https://res.cloudinary.com/dtnbwgpca/image/upload/v1743248706/download_1_q9uwk6.png",
+      "name": "KCB Bank",
+      "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/babel/babel-original.svg",
       "href": "#"
     }
   ]
