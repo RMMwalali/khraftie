@@ -10,10 +10,7 @@
     "astro": "astro",
     "setup-cosmic": "node setup-cosmic-content.mjs",
     "quick-setup": "node quick-setup-cosmic.mjs",
-    "audit-cosmic": "node audit-cosmic.mjs",
-    "auto-rebuild": "node scripts/auto-rebuild.js",
-    "watch-content": "node scripts/watch-and-rebuild.js",
-    "sync-cosmic": "node scripts/sync-from-cosmic.js"
+    "audit-cosmic": "node audit-cosmic.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

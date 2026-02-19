@@ -14,6 +14,13 @@ export default defineConfig({
   output: "static",
   image: {
     domains: ["images.unsplash.com", "res.cloudinary.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
   },
   // i18n: {
   //   defaultLocale: "en",
