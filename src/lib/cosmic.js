@@ -42,7 +42,13 @@ function getImageUrl(imageObj) {
 function getIconUrl(iconObj) {
   if (!iconObj) return null
   if (typeof iconObj === 'string') return iconObj
-  return iconObj.url || iconObj.imgix_url || null
+  
+  // Handle Cosmic image object structure
+  if (iconObj.url) return iconObj.url
+  if (iconObj.imgix_url) return iconObj.imgix_url
+  if (iconObj.name) return iconObj.name // For Cosmic uploaded images
+  
+  return null
 }
 
 // Helper function to fetch with fallback
