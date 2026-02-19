@@ -1,0 +1,98 @@
+---
+// Importing necessary components
+import MainLayout from "@/layouts/MainLayout.astro";
+import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
+import CardSmall from "@components/ui/cards/CardSmall.astro";
+import CardWide from "@components/ui/cards/CardWide.astro";
+import FeaturesStatsAlt from "@components/sections/features/FeaturesStatsAlt.astro";
+import TestimonialsSectionAlt from "@components/sections/testimonials/TestimonialsSectionAlt.astro";
+
+// Importing necessary functions from Astro
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { SITE } from "@data/constants";
+
+// Import cosmic content function
+import { getAboutContent } from "../../lib/cosmic.js";
+
+// Fetching all the product related content and sorting it by main.id
+const product: CollectionEntry<"products">[] = (
+  await getCollection("products", ({ id }) => {
+    return id.startsWith("en/");
+  })
+).sort(
+  (a: CollectionEntry<"products">, b: CollectionEntry<"products">) =>
+    a.data.main.id - b.data.main.id
+);
+
+// Fetch about page content from Cosmic (with JSON fallback)
+const aboutContent = await getAboutContent();
+
+const pageTitle: string = `About Us | ${SITE.title}`;
+---
+
+<MainLayout
+  title={pageTitle}
+  structuredData={{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "http://stillcraft-events.irentlist.website/about",
+    url: "http://stillcraft-events.irentlist.website/about",
+    name: "About Us | SkillCraft Events",
+    description: aboutContent.subTitle,
+    isPartOf: {
+      "@type": "WebSite",
+      url: "http://stillcraft-events.irentlist.website",
+      name: "StillCraft Events",
+      description: aboutContent.subTitle,
+    },
+    inLanguage: "en-US",
+  }}
+>
+  <div
+    class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
+  >
+    <div class="mb-4 flex items-center justify-between gap-8 sm:mb-8 md:mb-12">
+      <div class="flex items-center gap-12">
+        <h1
+          class="text-2xl font-bold tracking-tight text-balance text-neutral-800 md:text-4xl md:leading-tight dark:text-neutral-200"
+        >
+          {aboutContent.title}
+        </h1>
+        {
+          aboutContent.subTitle && (
+            <p class="hidden max-w-(--breakpoint-sm) text-pretty text-neutral-600 md:block dark:text-neutral-400">
+              {aboutContent.subTitle}
+            </p>
+          )
+        }
+      </div>
+      <PrimaryCTA title={aboutContent.ctaText} url={aboutContent.ctaUrl} noArrow={true} />
+    </div>
+    <!--Displaying products in alternating styles. Alternative product gets different card styling.-->
+    <!--Maps through all product entries and displays them with either CardSmall or CardWide based on their position.-->
+    <h3 class="mb-4 text-center text-3xl font-semibold">{aboutContent.galleryTitle}</h3>
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
+      {
+        product.map((product, index) => {
+          const position = index % 4;
+          if (position === 0 || position === 3) {
+            return <CardSmall product={product} />;
+          } else {
+            return <CardWide product={product} />;
+          }
+        })
+      }
+    </section>
+  </div>
+  <FeaturesStatsAlt
+    title={aboutContent.featuresTitle}
+    subTitle={aboutContent.featuresSubTitle}
+    benefits={aboutContent.featuresBenefits}
+  />
+  <!--Testimonials section-->
+  <TestimonialsSectionAlt
+    title={aboutContent.testimonialsTitle}
+    testimonials={aboutContent.testimonials}
+  />
+</MainLayout>

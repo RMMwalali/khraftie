@@ -10,7 +10,6 @@ import eventplanning from "@images/eventplanning.jpg";
 import creativeconcept from "@images/creativeconcept.png";
 import equipmentHire from "@images/equipmentHire.png";
 import brandAmbassador from "@images/brandambassador.png";
-import graphicDesign from "@images/graphicdesign.jpg";
 import sciencesafari from "@images/sciencesafari.png";
 import { SITE } from "@data/constants";
 
@@ -21,7 +20,7 @@ import { getServicesContent } from "../lib/cosmic.js";
 const servicesContent = await getServicesContent();
 
 // Map services data to include actual image imports
-const articles = servicesContent.services.map(service => {
+const articles = servicesContent.services.map((service: any) => {
   // Map image paths to actual imports
   let img = null;
   let imgOne = null;
@@ -98,7 +97,7 @@ const pageTitle: string = `Services | ${SITE.title}`;
   If 'single' is true, it displays one image, otherwise it displays two.
   -->
   {
-    articles.map((article) => {
+    articles.map((article: any) => {
       return article.isRightSection ? (
         <RightSection
           title={article.title}

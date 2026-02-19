@@ -255,3 +255,66 @@ export async function getContactContent() {
     contactJson
   )
 }
+
+// Blog page content
+export async function getBlogContent() {
+  return fetchWithFallback(
+    async () => {
+      const data = await cosmic.objects.findOne({
+        type: 'blog-content',
+        slug: 'blog-page'
+      }).props('metadata')
+      if (!data.object) {
+        console.warn('Blog content not found in Cosmic, using JSON fallback')
+        return {
+          title: "SkillCraft Blog",
+          subTitle: "Explore our blog for event planning tips, industry insights, and expert advice. Our team of professionals is dedicated to providing you with the latest trends and best practices in the event industry. Whether you're planning a wedding, corporate event, or private party, our blog is your go-to resource for all things event-related. Join us as we share our knowledge and experience to help you create unforgettable events that leave a lasting impression.",
+          secondTitle: "Insights",
+          secondSubTitle: "Stay up-to-date with the latest trends and developments in the construction industry with insights from SkillCraft Events's team of industry experts."
+        }
+      }
+      return data.object.metadata
+    },
+    {
+      title: "SkillCraft Blog",
+      subTitle: "Explore our blog for event planning tips, industry insights, and expert advice. Our team of professionals is dedicated to providing you with the latest trends and best practices in the event industry. Whether you're planning a wedding, corporate event, or private party, our blog is your go-to resource for all things event-related. Join us as we share our knowledge and experience to help you create unforgettable events that leave a lasting impression.",
+      secondTitle: "Insights",
+      secondSubTitle: "Stay up-to-date with the latest trends and developments in the construction industry with insights from SkillCraft Events's team of industry experts."
+    }
+  )
+}
+
+// Get all blog posts
+export async function getBlogPosts() {
+  return fetchWithFallback(
+    async () => {
+      const data = await cosmic.objects.find({
+        type: 'blog-posts'
+      }).props('metadata')
+      if (!data.objects || data.objects.length === 0) {
+        console.warn('Blog posts not found in Cosmic, using content collection fallback')
+        return []
+      }
+      return data.objects.map(obj => obj.metadata)
+    },
+    []
+  )
+}
+
+// Get single blog post by slug
+export async function getBlogPost(slug) {
+  return fetchWithFallback(
+    async () => {
+      const data = await cosmic.objects.findOne({
+        type: 'blog-posts',
+        slug: slug
+      }).props('metadata')
+      if (!data.object) {
+        console.warn(`Blog post ${slug} not found in Cosmic, using content collection fallback`)
+        return null
+      }
+      return data.object.metadata
+    },
+    null
+  )
+}

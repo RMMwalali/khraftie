@@ -118,8 +118,53 @@ Create the following Object Types in your Cosmic dashboard:
   - `buttonLabel` (Text)
   - `url` (Text)
 
+#### About Page Content
+- **Type**: `about-content`
+- **Slug**: `about-page`
+- **Metafields**:
+  - `title` (Text)
+  - `subTitle` (Text Area)
+  - `ctaText` (Text)
+  - `ctaUrl` (Text)
+  - `galleryTitle` (Text)
+  - `featuresTitle` (Text)
+  - `featuresSubTitle` (Text Area)
+  - `featuresBenefits` (Repeater)
+    - `benefit` (Text)
+  - `testimonialsTitle` (Text)
+  - `testimonials` (Repeater)
+    - `content` (Text Area)
+    - `author` (Text)
+    - `role` (Text)
+    - `avatarSrc` (Image)
+    - `avatarAlt` (Text)
+
+#### Blog Page Content
+- **Type**: `blog-content`
+- **Slug**: `blog-page`
+- **Metafields**:
+  - `title` (Text)
+  - `subTitle` (Text Area)
+  - `secondTitle` (Text)
+  - `secondSubTitle` (Text Area)
+
+#### Blog Posts
+- **Type**: `blog-posts`
+- **Metafields**:
+  - `title` (Text)
+  - `description` (Text Area)
+  - `author` (Text)
+  - `pubDate` (Date)
+  - `readTime` (Number)
+  - `cardImage` (Image)
+  - `cardImageAlt` (Text)
+  - `contents` (Repeater)
+    - `content` (Text Area)
+  - `tags` (Repeater)
+    - `tag` (Text)
+
 ### 5. Import Existing Content
-Copy the content from the existing JSON files in `src/content/homepage/` into your Cosmic objects.
+Copy the content from the existing JSON files in `src/content/homepage/` and `src/content/pages/` into your Cosmic objects. For blog posts, you can import content from the markdown files in `src/content/blog/` and `src/content/insights/`.
 
 ## How It Works
 
