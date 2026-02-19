@@ -41,7 +41,7 @@ interface Props {
     >
       {
         // Duplicate the partner list for a seamless loop.
-        [...partners, ...partners].map((partner) => (
+        [...partners, ...partners].map((partner, index) => (
           <a
             href={partner.href}
             target="_blank"
@@ -54,7 +54,6 @@ interface Props {
               class="h-24 w-auto rounded-xl duration-300 ease-in-out hover:scale-105"
               loading="lazy"
               decoding="async"
-              onerror="this.onerror=null; this.src='/src/images/stilliconn.png';"
             />
           </a>
         ))
@@ -81,38 +80,28 @@ interface Props {
 </style>
 
 <!-- Inline JavaScript to measure width and update the animation duration -->
-<script>
+<script is:inline>
   // Function to update the CSS variable and animation duration
   function updateScrollAnimation() {
     const track = document.querySelector(".scroll-track");
     if (track) {
       // Since the list is duplicated, one copy occupies half of the total scrollWidth
       const contentWidth = track.scrollWidth / 2;
-      if (contentWidth > 0) {
-        // Set CSS variable for use in the keyframes (in pixels)
-        document.documentElement.style.setProperty(
-          "--scroll-width",
-          `${contentWidth}px`
-        );
+      // Set CSS variable for use in the keyframes (in pixels)
+      document.documentElement.style.setProperty(
+        "--scroll-width",
+        `${contentWidth}px`
+      );
 
-        // Define your desired speed in pixels per second
-        const speed = 40; // Adjust speed as needed
-        // Compute the animation duration based on the width of one copy
-        const duration = contentWidth / speed;
-        (track as HTMLElement).style.animationDuration = duration + "s";
-      }
+      // Define your desired speed in pixels per second
+      const speed = 40; // Adjust speed as needed
+      // Compute the animation duration based on the width of one copy
+      const duration = contentWidth / speed;
+      track.style.animationDuration = duration + "s";
     }
   }
 
   // Update after initial load and on window resize
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateScrollAnimation);
-  } else {
-    updateScrollAnimation();
-  }
-  
-  window.addEventListener("resize", updateScrollAnimation);
-  
-  // Retry after images load
   window.addEventListener("load", updateScrollAnimation);
+  window.addEventListener("resize", updateScrollAnimation);
 </script>

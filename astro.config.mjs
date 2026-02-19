@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import compressor from "astro-compressor";
-// import starlight from "@astrojs/starlight";
+import starlight from "@astrojs/starlight";
 import vercel from "@astrojs/vercel";
 
 import mdx from "@astrojs/mdx";
@@ -10,18 +10,11 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   // https://docs.astro.build/en/guides/images/#authorizing-remote-images
-  site: "https://your-domain.com",
-  output: "static",
+  site: "https://kraftevents-main.vercel.app",
+  output: "server",
   adapter: vercel(),
   image: {
     domains: ["images.unsplash.com", "res.cloudinary.com"],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        pathname: "/**",
-      },
-    ],
   },
   // i18n: {
   //   defaultLocale: "en",
@@ -43,7 +36,7 @@ export default defineConfig({
         fr: "fr",
       },
     },
-  }), /* starlight({
+  }), starlight({
     title: "SkillCraft Events Docs",
     defaultLocale: "root",
     // https://github.com/withastro/starlight/blob/main/packages/starlight/CHANGELOG.md
@@ -121,7 +114,7 @@ export default defineConfig({
         },
       },
     ],
-  }), */ compressor({
+  }), compressor({
     gzip: false,
     brotli: true,
   }), mdx()],

@@ -20,6 +20,31 @@ import aboutJson from '../content/pages/about.json'
 import servicesJson from '../content/pages/services.json'
 import contactJson from '../content/pages/contact.json'
 
+// Helper function to extract image URL from Cosmic image object
+function getImageUrl(imageObj) {
+  if (!imageObj) return null
+  if (typeof imageObj === 'string') return imageObj
+  const url = imageObj.url || imageObj.imgix_url || null
+  
+  // For feature.jpg specifically, use local path since Cosmic URL returns 403
+  if (url && url.includes('feature.jpg')) {
+    return '/uploads/feature.jpg'
+  }
+  
+  if (url && url.includes('//uploads/')) {
+    // Fix double slash issue in Cosmic URLs
+    return url.replace('//uploads/', '/uploads/')
+  }
+  return url
+}
+
+// Helper function to extract icon URL from Cosmic icon object
+function getIconUrl(iconObj) {
+  if (!iconObj) return null
+  if (typeof iconObj === 'string') return iconObj
+  return iconObj.url || iconObj.imgix_url || null
+}
+
 // Helper function to fetch with fallback
 async function fetchWithFallback(cosmicQuery, fallbackData) {
   try {
@@ -32,7 +57,7 @@ async function fetchWithFallback(cosmicQuery, fallbackData) {
     const data = await cosmicQuery()
     return data
   } catch (error) {
-    console.warn('Cosmic fetch failed, using JSON fallback:', error.message)
+    console.warn('Cosmic fetch failed, using JSON fallback:', error?.message || 'Unknown error')
     return fallbackData
   }
 }
@@ -67,7 +92,15 @@ export async function getClientsContent() {
         console.warn('Clients content not found in Cosmic, using JSON fallback')
         return clientsJson
       }
-      return data.object.metadata
+      const metadata = data.object.metadata
+      // Transform partner icons to match component expectations
+      if (metadata.partners && Array.isArray(metadata.partners)) {
+        metadata.partners = metadata.partners.map(partner => ({
+          ...partner,
+          icon: getIconUrl(partner.icon)
+        }))
+      }
+      return metadata
     },
     clientsJson
   )
@@ -85,7 +118,13 @@ export async function getFeaturesGeneralContent() {
         console.warn('Features General content not found in Cosmic, using JSON fallback')
         return featuresGeneralJson
       }
-      return data.object.metadata
+      const metadata = data.object.metadata
+      // Transform image to match component expectations
+      if (metadata.image) {
+        metadata.src = getImageUrl(metadata.image)
+        delete metadata.image // Remove the old image object
+      }
+      return metadata
     },
     featuresGeneralJson
   )

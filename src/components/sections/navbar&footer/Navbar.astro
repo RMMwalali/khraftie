@@ -1,6 +1,5 @@
 ---
 //Import relevant dependencies
-import { Image } from "astro:assets";
 import ThemeIcon from "@components/ThemeIcon.astro";
 import NavLink from "@components/ui/links/NavLink.astro";
 import enStrings from "@utils/navigation.ts";
@@ -28,13 +27,7 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
         href={homeUrl}
         aria-label="Brand"
       >
-        <Image 
-          src={Logo} 
-          alt="Brand Logo" 
-          class="h-auto w-32"
-          widths={[128, 256]}
-          sizes="(max-width: 768px) 128px, 256px"
-        />
+        <img src={Logo.src} alt="Brand Logo" class="h-auto w-32" />
       </a>
       <!-- Collapse toggle for smaller screens -->
       <div class="mr-5 ml-auto md:hidden">

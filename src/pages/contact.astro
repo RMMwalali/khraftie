@@ -39,8 +39,8 @@ const pageTitle: string = `${contactContent.pageTitle} | ${SITE.title}`;
     subTitle={contactContent.subTitle}
     formTitle={contactContent.formTitle}
     formSubTitle={contactContent.formSubTitle}
-    phoneNumber={contactContent.contactInfo.find((info: any) => info.label === "Phone")?.value || "+254792234337"}
-    email={contactContent.contactInfo.find((info: any) => info.label === "Email")?.value || "info@stillcraftevents.co.ke"}
-    address={contactContent.contactInfo.find((info: any) => info.label === "Address")?.value || "671 Ngong Rd, Nairobi"}
+    phoneNumber={contactContent.contactInfo.find(info => info.label === "Phone")?.value || "+254792234337"}
+    email={contactContent.contactInfo.find(info => info.label === "Email")?.value || "info@stillcraftevents.co.ke"}
+    address={contactContent.contactInfo.find(info => info.label === "Address")?.value || "671 Ngong Rd, Nairobi"}
   />
 </MainLayout>

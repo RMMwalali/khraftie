@@ -8,7 +8,6 @@ import FeaturesGeneral from "@components/sections/features/FeaturesGeneral.astro
 import FeaturesNavs from "@components/sections/features/FeaturesNavs.astro";
 import TestimonialsSection from "@components/sections/testimonials/TestimonialsSection.astro";
 import FAQ from "@components/sections/misc/FAQ.astro";
-import livingstatues from "@images/livingstatues.jpg";
 import { getHeroContent } from "../lib/cosmic.js";
 import { getClientsContent } from "../lib/cosmic.js";
 import { getFeaturesGeneralContent } from "../lib/cosmic.js";
@@ -35,7 +34,7 @@ const ctaContent = await getCTAContent();
   <FeaturesGeneral
     title={featuresGeneralContent.title}
     subTitle={featuresGeneralContent.subTitle}
-    src={livingstatues}
+    src={featuresGeneralContent.image}
     alt={featuresGeneralContent.imageAlt}
     features={featuresGeneralContent.features}
   />
