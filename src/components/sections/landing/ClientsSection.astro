@@ -81,7 +81,7 @@ interface Props {
 </style>
 
 <!-- Inline JavaScript to measure width and update the animation duration -->
-<script is:inline>
+<script>
   // Function to update the CSS variable and animation duration
   function updateScrollAnimation() {
     const track = document.querySelector(".scroll-track");
@@ -98,11 +98,11 @@ interface Props {
       const speed = 40; // Adjust speed as needed
       // Compute the animation duration based on the width of one copy
       const duration = contentWidth / speed;
-      track.style.animationDuration = duration + "s";
+      (track as HTMLElement).style.animationDuration = duration + "s";
     }
   }
 
   // Update after initial load and on window resize
-  window.addEventListener("load", updateScrollAnimation);
+  document.addEventListener("DOMContentLoaded", updateScrollAnimation);
   window.addEventListener("resize", updateScrollAnimation);
 </script>
