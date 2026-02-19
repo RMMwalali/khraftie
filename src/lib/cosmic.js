@@ -57,7 +57,22 @@ async function fetchWithFallback(cosmicQuery, fallbackData) {
     const data = await cosmicQuery()
     return data
   } catch (error) {
-    console.warn('Cosmic fetch failed, using JSON fallback:', error?.message || 'Unknown error')
+    const errorMessage = error?.message || 'Unknown error'
+    
+    // Provide specific guidance for common errors
+    if (errorMessage.includes('No objects found') || errorMessage.includes('stillkraft-events-production')) {
+      console.warn('Cosmic bucket not found or empty. Please check:')
+      console.warn('1. Bucket slug is correct:', import.meta.env.PUBLIC_COSMIC_BUCKET_SLUG)
+      console.warn('2. Read key is valid')
+      console.warn('3. Bucket exists in Cosmic dashboard')
+      console.warn('4. Content types are created in bucket')
+    } else if (errorMessage.includes('401') || errorMessage.includes('403')) {
+      console.warn('Cosmic authentication failed. Please check your read key is valid')
+    } else if (errorMessage.includes('ENOTFOUND') || errorMessage.includes('network')) {
+      console.warn('Network error - check your connection and bucket URL')
+    }
+    
+    console.warn('Cosmic fetch failed, using JSON fallback:', errorMessage)
     return fallbackData
   }
 }

@@ -96,6 +96,10 @@ interface Props {
             src={videoSrc}
             alt={alt}
             class="h-1/2 w-full rounded-2xl object-cover object-center"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         )
       }

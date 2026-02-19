@@ -17,6 +17,7 @@ Your SkillCraft Events website has been successfully integrated with Cosmic CMS!
 From your Cosmic dashboard:
 1. Go to Settings → API Keys
 2. Copy the **Bucket Slug** and **Read Key**
+3. **Important**: Make sure the bucket slug exactly matches your bucket name (no typos)
 
 ### 3. Configure Environment Variables
 1. Copy `.env.example` to `.env` (if not exists)
@@ -25,6 +26,22 @@ From your Cosmic dashboard:
 PUBLIC_COSMIC_BUCKET_SLUG=your-bucket-slug
 PUBLIC_COSMIC_READ_KEY=your-read-key
 ```
+
+### 4. Troubleshooting Common Issues
+
+#### "No objects found for your query in bucket" Error:
+This usually means:
+- **Wrong bucket slug** - Check for typos in your `.env` file
+- **Empty bucket** - Create content types and add objects
+- **Wrong content types** - Ensure content types match the setup below
+
+#### "Authentication failed" Error:
+- **Invalid read key** - Regenerate your read key in Cosmic dashboard
+- **Expired key** - Create a new read key
+
+#### Network errors:
+- **Connection issues** - Check your internet connection
+- **Firewall blocking** - Ensure Cosmic domains are accessible
 
 ### 4. Create Content Types in Cosmic
 

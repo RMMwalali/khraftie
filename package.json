@@ -10,7 +10,8 @@
     "astro": "astro",
     "setup-cosmic": "node setup-cosmic-content.mjs",
     "quick-setup": "node quick-setup-cosmic.mjs",
-    "audit-cosmic": "node audit-cosmic.mjs"
+    "audit-cosmic": "node audit-cosmic.mjs",
+    "test-cosmic": "node test-cosmic.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

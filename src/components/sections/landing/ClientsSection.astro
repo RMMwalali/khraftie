@@ -54,6 +54,8 @@ interface Props {
               class="h-24 w-auto rounded-xl duration-300 ease-in-out hover:scale-105"
               loading="lazy"
               decoding="async"
+              sizes="(max-width: 768px) 80px, 96px"
+              onerror="this.onerror=null; this.src='/images/placeholder-logo.png'; this.alt='Partner Logo';"
             />
           </a>
         ))

@@ -15,6 +15,13 @@ export default defineConfig({
   adapter: vercel(),
   image: {
     domains: ["images.unsplash.com", "res.cloudinary.com"],
+    format: ["avif", "webp"],
+    quality: 80,
+    remotePatterns: [{
+      protocol: "https",
+      hostname: "res.cloudinary.com",
+      pathname: "/**",
+    }],
   },
   // i18n: {
   //   defaultLocale: "en",
