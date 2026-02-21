@@ -42,12 +42,23 @@ function getImageUrl(imageObj) {
 function getIconUrl(iconObj) {
   if (!iconObj) return null
   if (typeof iconObj === 'string') return iconObj
-  
-  // Handle Cosmic image object structure
-  if (iconObj.url) return iconObj.url
-  if (iconObj.imgix_url) return iconObj.imgix_url
-  if (iconObj.name) return iconObj.name // For Cosmic uploaded images
-  
+
+  // Handle common Cosmic media shapes
+  const url =
+    iconObj.url ||
+    iconObj.imgix_url ||
+    iconObj?.media?.url ||
+    iconObj?.media?.imgix_url ||
+    iconObj?.image?.url ||
+    iconObj?.image?.imgix_url ||
+    null
+
+  if (typeof url === 'string' && url.length > 0) {
+    if (url.startsWith('//')) return `https:${url}`
+    return url
+  }
+
+  // Some Cosmic uploads may only provide a name/key; don't guess a URL.
   return null
 }
 

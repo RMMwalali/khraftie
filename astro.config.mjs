@@ -14,12 +14,20 @@ export default defineConfig({
   output: "server",
   adapter: vercel(),
   image: {
-    domains: ["images.unsplash.com", "res.cloudinary.com"],
+    domains: ["images.unsplash.com", "res.cloudinary.com", "cdn.cosmicjs.com", "imgix.cosmicjs.com"],
     format: ["avif", "webp"],
     quality: 80,
     remotePatterns: [{
       protocol: "https",
       hostname: "res.cloudinary.com",
+      pathname: "/**",
+    }, {
+      protocol: "https",
+      hostname: "cdn.cosmicjs.com",
+      pathname: "/**",
+    }, {
+      protocol: "https",
+      hostname: "imgix.cosmicjs.com",
       pathname: "/**",
     }],
   },
