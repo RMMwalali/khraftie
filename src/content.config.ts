@@ -83,7 +83,7 @@ const insightsCollection = defineCollection({
   schema: ({ image }) => z.object ({
   title: z.string(),
   description: z.string(),
-  cardImage: z.union([image(), z.string()]),
+  cardImage: image(),
   cardImageAlt: z.string(),
   author: z.string().optional(),
   pubDate: z.date().optional(),
