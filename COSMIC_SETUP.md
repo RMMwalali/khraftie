@@ -1,7 +1,7 @@
 # Cosmic CMS Integration Setup Guide
 
 ## Overview
-Your SkillCraft Events website has been successfully integrated with Cosmic CMS! The integration includes:
+Your StillCraft Events website has been successfully integrated with Cosmic CMS! The integration includes:
 - ✅ Cosmic SDK installed
 - ✅ Fallback system using existing JSON files
 - ✅ No UI/UX changes - everything works exactly the same
@@ -11,7 +11,7 @@ Your SkillCraft Events website has been successfully integrated with Cosmic CMS!
 
 ### 1. Create Cosmic Account
 1. Go to [cosmicjs.com](https://cosmicjs.com) and create a free account
-2. Create a new Bucket (project) - name it something like "SkillCraft Events"
+2. Create a new Bucket (project) - name it something like "StillCraft Events"
 
 ### 2. Get API Keys
 From your Cosmic dashboard:

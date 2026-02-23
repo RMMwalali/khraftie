@@ -299,19 +299,19 @@ export async function getBlogContent() {
       if (!data.object) {
         console.warn('Blog content not found in Cosmic, using JSON fallback')
         return {
-          title: "SkillCraft Blog",
+          title: "StillCraft Blog",
           subTitle: "Explore our blog for event planning tips, industry insights, and expert advice. Our team of professionals is dedicated to providing you with the latest trends and best practices in the event industry. Whether you're planning a wedding, corporate event, or private party, our blog is your go-to resource for all things event-related. Join us as we share our knowledge and experience to help you create unforgettable events that leave a lasting impression.",
           secondTitle: "Insights",
-          secondSubTitle: "Stay up-to-date with the latest trends and developments in the construction industry with insights from SkillCraft Events's team of industry experts."
+          secondSubTitle: "Stay up-to-date with the latest trends and developments in the construction industry with insights from StillCraft Events's team of industry experts."
         }
       }
       return data.object.metadata
     },
     {
-      title: "SkillCraft Blog",
+      title: "StillCraft Blog",
       subTitle: "Explore our blog for event planning tips, industry insights, and expert advice. Our team of professionals is dedicated to providing you with the latest trends and best practices in the event industry. Whether you're planning a wedding, corporate event, or private party, our blog is your go-to resource for all things event-related. Join us as we share our knowledge and experience to help you create unforgettable events that leave a lasting impression.",
       secondTitle: "Insights",
-      secondSubTitle: "Stay up-to-date with the latest trends and developments in the construction industry with insights from SkillCraft Events's team of industry experts."
+      secondSubTitle: "Stay up-to-date with the latest trends and developments in the construction industry with insights from StillCraft Events's team of industry experts."
     }
   )
 }
@@ -327,7 +327,21 @@ export async function getBlogPosts() {
         console.warn('Blog posts not found in Cosmic, using content collection fallback')
         return []
       }
-      return data.objects.map(obj => obj.metadata)
+      return data.objects.map(obj => ({
+        slug: obj.slug,
+        title: obj?.metadata?.title,
+        description: obj?.metadata?.description,
+        contents: obj?.metadata?.contents,
+        author: obj?.metadata?.author,
+        role: obj?.metadata?.role,
+        authorImage: obj?.metadata?.authorImage,
+        authorImageAlt: obj?.metadata?.authorImageAlt,
+        pubDate: obj?.metadata?.pubDate,
+        cardImage: obj?.metadata?.cardImage,
+        cardImageAlt: obj?.metadata?.cardImageAlt,
+        readTime: obj?.metadata?.readTime,
+        tags: obj?.metadata?.tags,
+      }))
     },
     []
   )
@@ -345,8 +359,41 @@ export async function getBlogPost(slug) {
         console.warn(`Blog post ${slug} not found in Cosmic, using content collection fallback`)
         return null
       }
-      return data.object.metadata
+      return {
+        slug: data.object.slug,
+        title: data?.object?.metadata?.title,
+        description: data?.object?.metadata?.description,
+        contents: data?.object?.metadata?.contents,
+        author: data?.object?.metadata?.author,
+        role: data?.object?.metadata?.role,
+        authorImage: data?.object?.metadata?.authorImage,
+        authorImageAlt: data?.object?.metadata?.authorImageAlt,
+        pubDate: data?.object?.metadata?.pubDate,
+        cardImage: data?.object?.metadata?.cardImage,
+        cardImageAlt: data?.object?.metadata?.cardImageAlt,
+        readTime: data?.object?.metadata?.readTime,
+        tags: data?.object?.metadata?.tags,
+      }
     },
     null
   )
+}
+
+export function normalizeCosmicBlogPost(post) {
+  if (!post) return null
+  return {
+    slug: post.slug,
+    title: post.title || "",
+    description: post.description || "",
+    contents: Array.isArray(post.contents) ? post.contents : [],
+    author: post.author || "",
+    role: post.role || "",
+    authorImage: post.authorImage || null,
+    authorImageAlt: post.authorImageAlt || "",
+    pubDate: post.pubDate ? new Date(post.pubDate) : null,
+    cardImage: post.cardImage || null,
+    cardImageAlt: post.cardImageAlt || "",
+    readTime: Number(post.readTime || 0),
+    tags: Array.isArray(post.tags) ? post.tags : [],
+  }
 }

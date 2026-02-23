@@ -7,6 +7,7 @@ import CardInsight from "@components/ui/cards/CardInsight.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
+import { getBlogContent } from "@/lib/cosmic.js";
 
 // Get all blogs post in English and sort them based on publish date
 
@@ -26,16 +27,20 @@ const blogPosts: CollectionEntry<"blog">[] = englishBlogEntries.sort(
 const insightPosts: CollectionEntry<"insights">[] = englishInsightsEntries;
 
 // Separate the most recent post from others
-const mostRecentPost: CollectionEntry<"blog"> = blogPosts[0];
+const mostRecentPost: CollectionEntry<"blog"> | undefined = blogPosts[0];
 const otherPosts: CollectionEntry<"blog">[] = blogPosts.slice(1);
 
+const blogContent = await getBlogContent();
+
 // Define variables for page content
-const title: string = "SkillCraft Blog";
+const title: string = blogContent?.title || "StillCraft Blog";
 const subTitle: string =
+  blogContent?.subTitle ||
   "Explore our blog for event planning tips, industry insights, and expert advice. Our team of professionals is dedicated to providing you with the latest trends and best practices in the event industry. Whether you're planning a wedding, corporate event, or private party, our blog is your go-to resource for all things event-related. Join us as we share our knowledge and experience to help you create unforgettable events that leave a lasting impression.";
-const secondTitle: string = "Insights";
+const secondTitle: string = blogContent?.secondTitle || "Insights";
 const secondSubTitle: string =
-  "Stay up-to-date with the latest trends and developments in the construction industry with insights from SkillCraft Events's team of industry experts. ";
+  blogContent?.secondSubTitle ||
+  "Stay up-to-date with the latest trends and developments in the construction industry with insights from StillCraft Events's team of industry experts. ";
 
 const pageTitle: string = `Blog | ${SITE.title}`;
 ---
@@ -47,13 +52,13 @@ const pageTitle: string = `Blog | ${SITE.title}`;
     "@type": "WebPage",
     "@id": "https://screwfast.uk/blog",
     url: "https://screwfast.uk/blog",
-    name: "Blog | SkillCraft Events",
+    name: "Blog | StillCraft Events",
     description:
-      "Stay up-to-date with the latest trends and developments in the construction industry with insights from SkillCraft Events's team of industry experts.",
+      "Stay up-to-date with the latest trends and developments in the construction industry with insights from StillCraft Events's team of industry experts.",
     isPartOf: {
       "@type": "WebSite",
       url: "https://screwfast.uk",
-      name: "SkillCraft Events",
+      name: "StillCraft Events",
       description:
         "SkillCraft Events offers top-tier hardware tools and expert construction services to meet all your project needs.",
     },
@@ -91,7 +96,7 @@ const pageTitle: string = `Blog | ${SITE.title}`;
   <section
     class="mx-auto max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 2xl:max-w-full"
   >
-    <CardBlogRecent blogEntry={mostRecentPost} />
+    {mostRecentPost && <CardBlogRecent blogEntry={mostRecentPost} />}
   </section>
   <!--Insights section-->
   <section

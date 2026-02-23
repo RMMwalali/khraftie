@@ -1,0 +1,71 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import { SITE } from "@data/constants";
+import { formatDate } from "@utils/utils";
+import { Image } from "astro:assets";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const insightPosts = await getCollection("insights", ({ id }) => id.startsWith("en/"));
+  return insightPosts.map((post) => {
+    const idWithoutLang = post.id.replace(/^en\//, "");
+    return {
+      params: { id: idWithoutLang },
+    };
+  });
+}
+
+const { id } = Astro.params;
+
+const allInsightPosts = await getCollection("insights", ({ id }) => id.startsWith("en/"));
+const post = allInsightPosts.find((p) => p.id.replace(/^en\//, "") === id);
+
+if (!post) throw new Error("Insight post not found");
+
+const pageTitle: string = `${post.data.title} | ${SITE.title}`;
+---
+
+<MainLayout title={pageTitle}>
+  <section class="mx-auto max-w-3xl px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pt-10">
+    <div class="max-w-2xl">
+      <div class="mb-6">
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+          {post.data.author && post.data.pubDate
+            ? `${post.data.author} · ${formatDate(post.data.pubDate)}`
+            : post.data.author
+              ? post.data.author
+              : post.data.pubDate
+                ? formatDate(post.data.pubDate)
+                : ""}
+        </p>
+      </div>
+
+      <h1 class="mb-4 text-3xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200 md:text-4xl">
+        {post.data.title}
+      </h1>
+
+      <p class="mb-6 text-pretty text-neutral-700 dark:text-neutral-300">
+        {post.data.description}
+      </p>
+
+      {post.data.cardImage && (
+        <Image
+          class="mb-8 w-full rounded-xl object-cover"
+          src={post.data.cardImage}
+          alt={post.data.cardImageAlt || ""}
+          draggable={"false"}
+          format={"avif"}
+          loading={"lazy"}
+          decoding={"async"}
+          sizes={"(min-width: 1024px) 66vw, 100vw"}
+        />
+      )}
+
+      <div class="prose prose-neutral max-w-none dark:prose-invert">
+        <Fragment set:html={post.body ?? ""} />
+      </div>
+    </div>
+  </section>
+</MainLayout>

@@ -1,7 +1,7 @@
 ---
 title: "Engaging Audiences with Brand Ambassador Services in Nairobi"
 description: "Discover how StillCraft Events Co. uses highly-trained brand ambassadors to create memorable connections and elevate events in Nairobi."
-cardImage: "../../../images/blog/b4.jpg"
+cardImage: "@/images/blog/b4.jpg"
 cardImageAlt: "Brand ambassadors interacting at an event"
 author: "Frank"
 pubDate: 2025-02-07
