@@ -1,24 +1,25 @@
 ---
 import { Image } from "astro:assets";
 
-const { src, alt } = Astro.props;
-const isImageMetadata =
-  src && typeof src === 'object' && typeof src.src === 'string' && typeof src.width === 'number' && typeof src.height === 'number';
-const stringUrl = typeof src === 'string'
-  ? src
-  : (src?.url ?? src?.imgix_url ?? src?.image?.url ?? src?.image?.imgix_url ?? src?.media?.url ?? src?.media?.imgix_url ?? null);
-
 interface Props {
-  src?: string;
+  src?: unknown;
   alt?: string;
 }
+
+const { src, alt } = Astro.props as Props;
+const anySrc: any = src as any;
+const isImageMetadata =
+  anySrc && typeof anySrc === 'object' && typeof anySrc.src === 'string' && typeof anySrc.width === 'number' && typeof anySrc.height === 'number';
+const stringUrl = typeof anySrc === 'string'
+  ? anySrc
+  : (anySrc?.url ?? anySrc?.imgix_url ?? anySrc?.image?.url ?? anySrc?.image?.imgix_url ?? anySrc?.media?.url ?? anySrc?.media?.imgix_url ?? null);
 ---
 
 {src && (
   isImageMetadata ? (
     <Image
       class="inline-block h-8 w-8 rounded-full ring-2 ring-neutral-50 dark:ring-purple-800"
-      src={src}
+      src={anySrc}
       alt={alt || ""}
       inferSize
       loading={"eager"}

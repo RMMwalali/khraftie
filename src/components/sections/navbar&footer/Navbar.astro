@@ -91,7 +91,7 @@ const logoUrl = cosmicNav.logoUrl;
       >
         <!-- Navigation links and Authentication component -->
         {
-          navLinks.map((link) => (
+          navLinks.map((link: any) => (
             <NavLink url={link.url} name={link.name} />
           ))
         }

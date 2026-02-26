@@ -10,13 +10,14 @@ const {
   label = Astro.currentLocale === "fr" ? "Lire plus" : "Read more",
 } = Astro.props;
 
-const data = insightEntry?.data ?? insightEntry;
-const imgSrc = data?.cardImage;
+const data: any = (insightEntry as any)?.data ?? insightEntry;
+const imgSrc: any = data?.cardImage;
 const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
 const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
 const entryId = insightEntry?.id;
-const baseSlug = typeof insightEntry?.slug === 'string'
-  ? insightEntry.slug
+const entrySlug = (insightEntry as any)?.slug;
+const baseSlug = typeof entrySlug === 'string'
+  ? entrySlug
   : (typeof entryId === 'string'
     ? entryId.replace(/^en\//, "").replace(/^fr\//, "")
     : (typeof data?.slug === 'string' ? data.slug : ""));

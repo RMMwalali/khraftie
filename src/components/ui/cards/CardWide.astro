@@ -5,8 +5,8 @@ import Icon from "@components/ui/icons/Icon.astro";
 import type { CollectionEntry } from "astro:content";
 
 const { product, productLocale = "" } = Astro.props;
-const data = product?.data ?? product;
-const imgSrc = data?.main?.imgCard ?? data?.imageUrl;
+const data: any = (product as any)?.data ?? product;
+const imgSrc: any = data?.main?.imgCard ?? data?.imageUrl;
 const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
 const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
 const entryId = product?.id;

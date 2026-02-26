@@ -6,13 +6,14 @@ import AvatarBlogLarge from "@components/ui/avatars/AvatarBlogLarge.astro";
 import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
 
 const { blogEntry, recentBlogLocale = "" } = Astro.props;
-const data = blogEntry?.data ?? blogEntry;
-const imgSrc = data?.cardImage;
+const data: any = (blogEntry as any)?.data ?? blogEntry;
+const imgSrc: any = data?.cardImage;
 const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
 const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
 const entryId = blogEntry?.id;
-const baseSlug = typeof blogEntry?.slug === 'string'
-  ? blogEntry.slug
+const entrySlug = (blogEntry as any)?.slug;
+const baseSlug = typeof entrySlug === 'string'
+  ? entrySlug
   : (typeof entryId === 'string'
     ? entryId.replace(/^en\//, "").replace(/^fr\//, "")
     : (typeof data?.slug === 'string' ? data.slug : ""));
@@ -69,7 +70,7 @@ interface Props {
     </h2>
     <!-- Container for the author's avatar and metadata -->
     <div class="mt-6 flex items-center sm:mt-10">
-      <AvatarBlogLarge blogEntry={data} />
+      <AvatarBlogLarge blogEntry={data as any} />
 
       <div class="ms-3 sm:ms-4">
         <p class="font-bold text-neutral-800 sm:mb-1 dark:text-neutral-200">
@@ -91,4 +92,5 @@ interface Props {
       />
     </div>
   </div>
+</div>
 </div>

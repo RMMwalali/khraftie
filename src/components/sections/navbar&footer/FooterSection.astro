@@ -4,7 +4,6 @@ import FooterSocialLink from "@components/ui/links/FooterSocialLink.astro";
 import EmailFooterInput from "@components/ui/forms/input/EmailFooterInput.astro";
 import enStrings from "@utils/navigation.ts";
 import frStrings from "@utils/fr/navigation.ts";
-import Icon from "@components/ui/icons/Icon.astro";
 import Logo from "@images/stilliconn.png";
 import { SITE } from "@data/constants";
 import Instagram from "@images/ig.png";
@@ -23,7 +22,7 @@ const crafted: string =
   Astro.currentLocale === "fr" ? "Fabriqué par" : "Crafted by";
 const footerSections = (Array.isArray(cosmicFooter.sections) && cosmicFooter.sections.length) ? cosmicFooter.sections : strings.footerLinks;
 const facebookUrl = cosmicFooter?.socialLinks?.facebook || strings.socialLinks.facebook;
-const instagramUrl = cosmicFooter?.socialLinks?.instagram || strings.socialLinks.instagram;
+const instagramUrl = (cosmicFooter?.socialLinks as any)?.instagram || (strings.socialLinks as any)?.instagram;
 ---
 
 <footer class="w-full bg-neutral-300 dark:bg-neutral-900">
@@ -37,13 +36,13 @@ const instagramUrl = cosmicFooter?.socialLinks?.instagram || strings.socialLinks
       </div>
       <!-- An array of links for Product and Company sections -->
       {
-        footerSections.map((section) => (
+        footerSections.map((section: any) => (
           <div class="col-span-1">
             <h3 class="font-bold text-neutral-800 dark:text-neutral-200">
               {section.section}
             </h3>
             <ul class="mt-3 grid space-y-3">
-              {section.links.map((link, index) => (
+              {section.links.map((link: any, index: number) => (
                 <li>
                   <a
                     href={link.url}
