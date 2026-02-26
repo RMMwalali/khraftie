@@ -1,15 +1,13 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
 import CardInsight from "@components/ui/cards/CardInsight.astro";
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
+import { getPosts } from "@/lib/cosmic.js";
 
-const englishInsightsEntries = await getCollection("insights", ({ id }) => {
-  return id.startsWith("en/");
-});
-
-const insightPosts: CollectionEntry<"insights">[] = englishInsightsEntries;
+const cosmicInsightsAll = await getPosts({ category: "insights" });
+const insightPosts: any[] = Array.isArray(cosmicInsightsAll)
+  ? cosmicInsightsAll.filter((p: any) => typeof p?.slug === "string" && p.slug.startsWith("insight-"))
+  : [];
 
 const pageTitle: string = `Insights | ${SITE.title}`;
 ---

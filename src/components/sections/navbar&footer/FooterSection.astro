@@ -9,18 +9,21 @@ import Logo from "@images/stilliconn.png";
 import { SITE } from "@data/constants";
 import Instagram from "@images/ig.png";
 import Facebook from "@images/fb.png";
+import { getFooterContent } from "@/lib/cosmic.js";
 // Select the correct translation based on the page's lang prop:
 const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
 
 // Define the variables that will be used in this component
-const sectionThreeTitle: string =
-  Astro.currentLocale === "fr" ? "Rester à jour" : "Join our wait list";
-const sectionThreeContent: string =
-  Astro.currentLocale === "fr"
+const cosmicFooter = await getFooterContent();
+const sectionThreeTitle: string = cosmicFooter.newsletterTitle || (Astro.currentLocale === "fr" ? "Rester à jour" : "Join our wait list");
+const sectionThreeContent: string = cosmicFooter.newsletterContent || (Astro.currentLocale === "fr"
     ? "Restez informé des derniers outils et des offres exclusives."
-    : "Stay updated with our latest events.";
+    : "Stay updated with our latest events.");
 const crafted: string =
   Astro.currentLocale === "fr" ? "Fabriqué par" : "Crafted by";
+const footerSections = (Array.isArray(cosmicFooter.sections) && cosmicFooter.sections.length) ? cosmicFooter.sections : strings.footerLinks;
+const facebookUrl = cosmicFooter?.socialLinks?.facebook || strings.socialLinks.facebook;
+const instagramUrl = cosmicFooter?.socialLinks?.instagram || strings.socialLinks.instagram;
 ---
 
 <footer class="w-full bg-neutral-300 dark:bg-neutral-900">
@@ -30,11 +33,11 @@ const crafted: string =
     <div class="grid grid-cols-2 gap-6 md:grid-cols-4 lg:grid-cols-5">
       <div class="col-span-full lg:col-span-1">
         <!-- Brand Logo -->
-        <img src={Logo.src} alt="Logo" class="h-auto w-40" />
+        <img src={Logo.src} alt="StillCraft Events Logo" class="h-auto w-40" />
       </div>
       <!-- An array of links for Product and Company sections -->
       {
-        strings.footerLinks.map((section) => (
+        footerSections.map((section) => (
           <div class="col-span-1">
             <h3 class="font-bold text-neutral-800 dark:text-neutral-200">
               {section.section}
@@ -93,7 +96,7 @@ const crafted: string =
 
       <!-- Social Brands -->
       <div class="flex items-center space-x-4">
-        <FooterSocialLink url={strings.socialLinks.facebook}>
+        <FooterSocialLink url={facebookUrl}>
           <img
             src={Facebook.src}
             alt="Facebook Logo"
@@ -101,8 +104,8 @@ const crafted: string =
           />
         </FooterSocialLink>
         {
-          "instagram" in strings.socialLinks && (
-            <FooterSocialLink url={strings.socialLinks.instagram}>
+          instagramUrl && (
+            <FooterSocialLink url={instagramUrl}>
               <img
                 src={Instagram.src}
                 alt="Instagram Logo"

@@ -72,12 +72,22 @@ import { servicesData, successStoriesData } from "@data/mega_link";
           href={successStoriesData[0].learnMoreUrl}
         >
           {successStoriesData[0].image && (
-            <Image
-              src={successStoriesData[0].image}
-              inferSize={true}
-              alt={successStoriesData[0].alt || ""}
-              class="size-32 rounded-lg"
-            />
+            typeof successStoriesData[0].image === 'string' ? (
+              <img
+                src={successStoriesData[0].image}
+                alt={successStoriesData[0].alt || ""}
+                class="size-32 rounded-lg object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <Image
+                src={successStoriesData[0].image}
+                inferSize={true}
+                alt={successStoriesData[0].alt || ""}
+                class="size-32 rounded-lg"
+              />
+            )
           )}
           <div class="grow">
             <p class="text-sm text-neutral-800 dark:text-neutral-400">

@@ -5,6 +5,14 @@ import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
 // Destructure the props passed to the Astro component
 const { title, subTitle, btnExists, btnTitle, btnURL, img, imgAlt } =
   Astro.props;
+// Detect if `img` is an Astro ImageMetadata (imported) vs a URL/string or CMS object
+const isImageMetadata =
+  img && typeof img === 'object' && typeof img.src === 'string' && typeof img.width === 'number' && typeof img.height === 'number';
+
+// Try to extract a usable URL when not ImageMetadata
+const stringUrl = typeof img === 'string'
+  ? img
+  : (img?.url ?? img?.imgix_url ?? img?.image?.url ?? img?.image?.imgix_url ?? img?.media?.url ?? img?.media?.imgix_url ?? null);
 // Define TypeScript interface for props
 interface Props {
   title: string;
@@ -23,16 +31,27 @@ interface Props {
 >
   {
     img && (
-      <Image
-        class="w-full rounded-xl"
-        src={img}
-        alt={imgAlt}
-        draggable={"false"}
-        format={"avif"}
-        loading={"lazy"}
-        decoding={"async"}
-        sizes={"(min-width: 1024px) 50vw, 100vw"}
-      />
+      isImageMetadata ? (
+        <Image
+          class="w-full rounded-xl"
+          src={img}
+          alt={imgAlt}
+          draggable={"false"}
+          format={"avif"}
+          loading={"lazy"}
+          decoding={"async"}
+          sizes={"(min-width: 1024px) 50vw, 100vw"}
+        />
+      ) : stringUrl ? (
+        <img
+          class="w-full rounded-xl"
+          src={stringUrl}
+          alt={imgAlt}
+          draggable="false"
+          loading="lazy"
+          decoding="async"
+        />
+      ) : null
     )
   }
   <!-- The container for title, subtitle, and optional CTA button -->

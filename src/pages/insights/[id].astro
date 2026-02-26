@@ -4,27 +4,30 @@ import { getCollection } from "astro:content";
 import { SITE } from "@data/constants";
 import { formatDate } from "@utils/utils";
 import { Image } from "astro:assets";
+import { getPost, getPosts } from "@/lib/cosmic.js";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const insightPosts = await getCollection("insights", ({ id }) => id.startsWith("en/"));
-  return insightPosts.map((post) => {
-    const idWithoutLang = post.id.replace(/^en\//, "");
-    return {
-      params: { id: idWithoutLang },
-    };
-  });
+  const cosmicInsights = await getPosts({ category: "insights" });
+  const insightPosts = Array.isArray(cosmicInsights)
+    ? cosmicInsights.filter((p) => typeof p?.slug === "string" && p.slug.startsWith("insight-"))
+    : [];
+
+  return insightPosts.map((post) => ({
+    params: { id: post.slug },
+  }));
 }
 
 const { id } = Astro.params;
-
-const allInsightPosts = await getCollection("insights", ({ id }) => id.startsWith("en/"));
-const post = allInsightPosts.find((p) => p.id.replace(/^en\//, "") === id);
-
+const post = await getPost(id);
 if (!post) throw new Error("Insight post not found");
+const data: any = post;
+const imgMain = data?.cardImage;
+const isImageMetadataMain = imgMain && typeof imgMain === 'object' && typeof imgMain.src === 'string' && typeof imgMain.width === 'number' && typeof imgMain.height === 'number';
+const stringUrlMain = typeof imgMain === 'string' ? imgMain : (imgMain?.url ?? imgMain?.imgix_url ?? imgMain?.image?.url ?? imgMain?.image?.imgix_url ?? imgMain?.media?.url ?? imgMain?.media?.imgix_url ?? null);
 
-const pageTitle: string = `${post.data.title} | ${SITE.title}`;
+const pageTitle: string = `${data.title} | ${SITE.title}`;
 ---
 
 <MainLayout title={pageTitle}>
@@ -32,39 +35,57 @@ const pageTitle: string = `${post.data.title} | ${SITE.title}`;
     <div class="max-w-2xl">
       <div class="mb-6">
         <p class="text-sm text-neutral-500 dark:text-neutral-400">
-          {post.data.author && post.data.pubDate
-            ? `${post.data.author} · ${formatDate(post.data.pubDate)}`
-            : post.data.author
-              ? post.data.author
-              : post.data.pubDate
-                ? formatDate(post.data.pubDate)
+          {data.author && data.pubDate
+            ? `${data.author} · ${formatDate(data.pubDate)}`
+            : data.author
+              ? data.author
+              : data.pubDate
+                ? formatDate(data.pubDate)
                 : ""}
         </p>
       </div>
 
       <h1 class="mb-4 text-3xl font-bold tracking-tight text-neutral-800 dark:text-neutral-200 md:text-4xl">
-        {post.data.title}
+        {data.title}
       </h1>
 
       <p class="mb-6 text-pretty text-neutral-700 dark:text-neutral-300">
-        {post.data.description}
+        {data.description}
       </p>
 
-      {post.data.cardImage && (
-        <Image
-          class="mb-8 w-full rounded-xl object-cover"
-          src={post.data.cardImage}
-          alt={post.data.cardImageAlt || ""}
-          draggable={"false"}
-          format={"avif"}
-          loading={"lazy"}
-          decoding={"async"}
-          sizes={"(min-width: 1024px) 66vw, 100vw"}
-        />
+      {imgMain && (
+        isImageMetadataMain ? (
+          <Image
+            class="mb-8 w-full rounded-xl object-cover"
+            src={imgMain}
+            alt={data.cardImageAlt || ""}
+            draggable={"false"}
+            format={"avif"}
+            loading={"lazy"}
+            decoding={"async"}
+            sizes={"(min-width: 1024px) 66vw, 100vw"}
+          />
+        ) : stringUrlMain ? (
+          <img
+            class="mb-8 w-full rounded-xl object-cover"
+            src={stringUrlMain}
+            alt={data.cardImageAlt || ""}
+            loading="lazy"
+            decoding="async"
+          />
+        ) : null
       )}
 
       <div class="prose prose-neutral max-w-none dark:prose-invert">
-        <Fragment set:html={post.body ?? ""} />
+        {post.body ? (
+          <Fragment set:html={post.body ?? ""} />
+        ) : (
+          <div class="space-y-4">
+            {(data.contents || []).map((p: string) => (
+              <p>{p}</p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   </section>

@@ -13,17 +13,23 @@ import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
 
 // Import cosmic content function
-import { getAboutContent } from "../../lib/cosmic.js";
+import { getAboutContent, getAboutGallery } from "../../lib/cosmic.js";
 
-// Fetching all the product related content and sorting it by main.id
-const product: CollectionEntry<"products">[] = (
-  await getCollection("products", ({ id }) => {
-    return id.startsWith("en/");
-  })
-).sort(
-  (a: CollectionEntry<"products">, b: CollectionEntry<"products">) =>
-    a.data.main.id - b.data.main.id
-);
+// Fetch Cosmic About Gallery with fallback to content collection 'products'
+const gallery = await getAboutGallery();
+const useCosmicGallery = Array.isArray(gallery) && gallery.length > 0;
+
+// Fallback: Fetching all the product related content and sorting it by main.id
+const product: CollectionEntry<"products">[] = useCosmicGallery
+  ? []
+  : (
+      await getCollection("products", ({ id }) => {
+        return id.startsWith("en/");
+      })
+    ).sort(
+      (a: CollectionEntry<"products">, b: CollectionEntry<"products">) =>
+        a.data.main.id - b.data.main.id
+    );
 
 // Fetch about page content from Cosmic (with JSON fallback)
 const aboutContent = await getAboutContent();
@@ -69,19 +75,20 @@ const pageTitle: string = `About Us | ${SITE.title}`;
       </div>
       <PrimaryCTA title={aboutContent.ctaText} url={aboutContent.ctaUrl} noArrow={true} />
     </div>
-    <!--Displaying products in alternating styles. Alternative product gets different card styling.-->
-    <!--Maps through all product entries and displays them with either CardSmall or CardWide based on their position.-->
+    <!--Displaying gallery items. If Cosmic gallery exists, use its size field to drive layout; otherwise fallback to alternating pattern.-->
     <h3 class="mb-4 text-center text-3xl font-semibold">{aboutContent.galleryTitle}</h3>
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">
       {
-        product.map((product, index) => {
-          const position = index % 4;
-          if (position === 0 || position === 3) {
-            return <CardSmall product={product} />;
-          } else {
-            return <CardWide product={product} />;
-          }
-        })
+        useCosmicGallery
+          ? gallery.map((item: any) => (item.size === 'wide' ? <CardWide product={item} /> : <CardSmall product={item} />))
+          : product.map((product, index) => {
+              const position = index % 4;
+              if (position === 0 || position === 3) {
+                return <CardSmall product={product} />;
+              } else {
+                return <CardWide product={product} />;
+              }
+            })
       }
     </section>
   </div>

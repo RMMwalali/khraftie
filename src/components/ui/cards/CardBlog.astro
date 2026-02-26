@@ -6,6 +6,16 @@ import { formatDate } from "@utils/utils";
 import type { CollectionEntry } from "astro:content";
 
 const { blogEntry, blogLocale = "" } = Astro.props;
+const data = blogEntry?.data ?? blogEntry;
+const imgSrc = data?.cardImage;
+const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
+const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
+const entryId = blogEntry?.id;
+const baseSlug = typeof blogEntry?.slug === 'string'
+  ? blogEntry.slug
+  : (typeof entryId === 'string'
+    ? entryId.replace(/^en\//, "").replace(/^fr\//, "")
+    : (typeof data?.slug === 'string' ? data.slug : ""));
 
 interface Props {
   blogEntry: CollectionEntry<"blog">;
@@ -20,24 +30,34 @@ interface Props {
 <a
   class="group relative block rounded-xl ring-purple-500 outline-hidden transition duration-500 focus-visible:ring-3 dark:ring-purple-200 dark:focus:outline-hidden"
   href={blogLocale && blogLocale !== "en"
-    ? `/${blogLocale}/blog/${blogEntry.id.replace(/^fr\//, "")}/`
-    : `/blog/${blogEntry.id.replace(/^en\//, "")}/`}
+    ? `/${blogLocale}/blog/${baseSlug}/`
+    : `/blog/${baseSlug}/`}
   data-astro-prefetch
 >
   <!-- The container for the blog post's cover image. Uses astro:assets' Image for image source -->
   <div
     class="relative h-[350px] w-full shrink-0 overflow-hidden rounded-xl before:absolute before:inset-x-0 before:z-1 before:size-full before:from-neutral-900/[.7]"
   >
-    {blogEntry.data.cardImage && (
-      <Image
-        class="absolute start-0 top-0 size-full object-cover transition duration-500 group-hover:scale-110"
-        src={blogEntry.data.cardImage}
-        alt={blogEntry.data.cardImageAlt || ""}
-        draggable={"false"}
-        loading={"lazy"}
-        decoding={"async"}
-        sizes={"(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
-      />
+    {imgSrc && (
+      isImageMetadata ? (
+        <Image
+          class="absolute start-0 top-0 size-full object-cover transition duration-500 group-hover:scale-110"
+          src={imgSrc}
+          alt={data?.cardImageAlt || ""}
+          draggable={"false"}
+          loading={"lazy"}
+          decoding={"async"}
+          sizes={"(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"}
+        />
+      ) : stringUrl ? (
+        <img
+          class="absolute start-0 top-0 size-full object-cover transition duration-500 group-hover:scale-110"
+          src={stringUrl}
+          alt={data?.cardImageAlt || ""}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : null
     )}
   </div>
   <!-- The container for the blog author's avatar and associated metadata (author name and publication date) -->
@@ -48,10 +68,10 @@ interface Props {
 
         <div class="ms-2.5 sm:ms-4">
           <h4 class="font-bold text-neutral-50">
-            {blogEntry.data.author}
+            {data.author}
           </h4>
           <p class="text-xs text-neutral-50/[.8]">
-            {formatDate(blogEntry.data.pubDate)}
+            {formatDate(data.pubDate)}
           </p>
         </div>
       </div>
@@ -63,10 +83,10 @@ interface Props {
       <h3
         class="text-lg font-bold text-balance text-neutral-50 group-hover:text-neutral-50/[.8] sm:text-3xl"
       >
-        {blogEntry.data.title}
+        {data.title}
       </h3>
       <p class="mt-2 text-pretty text-neutral-50/[.8]">
-        {blogEntry.data.description}
+        {data.description}
       </p>
     </div>
   </div>

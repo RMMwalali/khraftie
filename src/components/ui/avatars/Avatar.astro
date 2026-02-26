@@ -2,6 +2,11 @@
 import { Image } from "astro:assets";
 
 const { src, alt } = Astro.props;
+const isImageMetadata =
+  src && typeof src === 'object' && typeof src.src === 'string' && typeof src.width === 'number' && typeof src.height === 'number';
+const stringUrl = typeof src === 'string'
+  ? src
+  : (src?.url ?? src?.imgix_url ?? src?.image?.url ?? src?.image?.imgix_url ?? src?.media?.url ?? src?.media?.imgix_url ?? null);
 
 interface Props {
   src?: string;
@@ -10,11 +15,21 @@ interface Props {
 ---
 
 {src && (
-  <Image
-    class="inline-block h-8 w-8 rounded-full ring-2 ring-neutral-50 dark:ring-purple-800"
-    src={src}
-    alt={alt || ""}
-    inferSize
-    loading={"eager"}
-  />
+  isImageMetadata ? (
+    <Image
+      class="inline-block h-8 w-8 rounded-full ring-2 ring-neutral-50 dark:ring-purple-800"
+      src={src}
+      alt={alt || ""}
+      inferSize
+      loading={"eager"}
+    />
+  ) : stringUrl ? (
+    <img
+      class="inline-block h-8 w-8 rounded-full ring-2 ring-neutral-50 dark:ring-purple-800"
+      src={stringUrl}
+      alt={alt || ""}
+      loading="lazy"
+      decoding="async"
+    />
+  ) : null
 )}

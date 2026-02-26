@@ -5,6 +5,10 @@ import Icon from "@components/ui/icons/Icon.astro";
 import type { CollectionEntry } from "astro:content";
 
 const { product, productLocale = "" } = Astro.props;
+const data = product?.data ?? product;
+const imgSrc = data?.main?.imgCard ?? data?.imageUrl;
+const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
+const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
 
 interface Props {
   product: CollectionEntry<"products">;
@@ -22,17 +26,28 @@ const imageClass =
 >
   <!-- The product's main image -->
   {
-    product.data.main.imgCard && (
-      <Image
-        src={product.data.main.imgCard}
-        alt={product.data.main.imgAlt}
-        draggable={"true"}
-        class={imageClass}
-        format={"avif"}
-        loading={"lazy"}
-        decoding={"async"}
-        sizes={"(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 100vw"}
-      />
+    imgSrc && (
+      isImageMetadata ? (
+        <Image
+          src={imgSrc}
+          alt={data?.main?.imgAlt || data?.alt || ""}
+          draggable={"true"}
+          class={imageClass}
+          format={"avif"}
+          loading={"lazy"}
+          decoding={"async"}
+          sizes={"(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 100vw"}
+        />
+      ) : stringUrl ? (
+        <img
+          src={stringUrl}
+          alt={data?.main?.imgAlt || data?.alt || ""}
+          draggable="true"
+          class={imageClass}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : null
     )
   }
   <!-- An overlay gradient that sits on top of the product image-->
@@ -43,6 +58,6 @@ const imageClass =
   <!-- The product's subtitle and the anchor SVG icon-->
   <span
     class="relative mb-3 ml-4 inline-block text-sm font-bold text-violet-600 transition duration-[600ms] ease-[cubic-bezier(0.45,0,0.55,1)] group-hover:scale-110 md:ml-5 md:text-lg"
-    >{product.data.description} <Icon name="openInNew" />
+    >{data.description} <Icon name="openInNew" />
   </span>
 </div>

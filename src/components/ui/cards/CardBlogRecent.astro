@@ -6,6 +6,16 @@ import AvatarBlogLarge from "@components/ui/avatars/AvatarBlogLarge.astro";
 import PrimaryCTA from "@components/ui/buttons/PrimaryCTA.astro";
 
 const { blogEntry, recentBlogLocale = "" } = Astro.props;
+const data = blogEntry?.data ?? blogEntry;
+const imgSrc = data?.cardImage;
+const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
+const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
+const entryId = blogEntry?.id;
+const baseSlug = typeof blogEntry?.slug === 'string'
+  ? blogEntry.slug
+  : (typeof entryId === 'string'
+    ? entryId.replace(/^en\//, "").replace(/^fr\//, "")
+    : (typeof data?.slug === 'string' ? data.slug : ""));
 
 interface Props {
   blogEntry: CollectionEntry<"blog">;
@@ -18,17 +28,27 @@ interface Props {
   <!-- Container for the blog post's cover image -->
   <div class="sm:order-2">
     <div class="relative rounded-lg pt-[50%] sm:pt-[100%]">
-      {blogEntry.data.cardImage && (
-        <Image
-          class="absolute start-0 top-0 size-full rounded-xl object-cover"
-          src={blogEntry.data.cardImage}
-          alt={blogEntry.data.cardImageAlt || ""}
-          draggable={"false"}
-          loading={"eager"}
-          format={"avif"}
-          decoding={"async"}
-          sizes={"(min-width: 1024px) 50vw, 100vw"}
-        />
+      {imgSrc && (
+        isImageMetadata ? (
+          <Image
+            class="absolute start-0 top-0 size-full rounded-xl object-cover"
+            src={imgSrc}
+            alt={data?.cardImageAlt || ""}
+            draggable={"false"}
+            loading={"eager"}
+            format={"avif"}
+            decoding={"async"}
+            sizes={"(min-width: 1024px) 50vw, 100vw"}
+          />
+        ) : stringUrl ? (
+          <img
+            class="absolute start-0 top-0 size-full rounded-xl object-cover"
+            src={stringUrl}
+            alt={data?.cardImageAlt || ""}
+            loading="eager"
+            decoding="async"
+          />
+        ) : null
       )}
     </div>
   </div>
@@ -41,22 +61,22 @@ interface Props {
       <a
         class="ring-purple-500 outline-hidden transition duration-300 hover:text-violet-400 focus-visible:ring-3 dark:text-neutral-300 dark:ring-purple-200 dark:hover:text-neutral-50 dark:focus:outline-hidden"
         href={recentBlogLocale && recentBlogLocale !== "en"
-          ? `/${recentBlogLocale}/blog/${blogEntry.id.replace(/^fr\//, "")}/`
-          : `/blog/${blogEntry.id.replace(/^en\//, "")}/`}
+          ? `/${recentBlogLocale}/blog/${baseSlug}/`
+          : `/blog/${baseSlug}/`}
       >
-        {blogEntry.data.description}
+        {data.description}
       </a>
     </h2>
     <!-- Container for the author's avatar and metadata -->
     <div class="mt-6 flex items-center sm:mt-10">
-      <AvatarBlogLarge blogEntry={blogEntry} />
+      <AvatarBlogLarge blogEntry={data} />
 
       <div class="ms-3 sm:ms-4">
         <p class="font-bold text-neutral-800 sm:mb-1 dark:text-neutral-200">
-          {blogEntry.data.author}
+          {data.author}
         </p>
         <p class="text-xs text-neutral-500">
-          {blogEntry.data.role}
+          {data.role}
         </p>
       </div>
     </div>
@@ -64,8 +84,8 @@ interface Props {
     <div class="mt-5">
       <PrimaryCTA
         url={recentBlogLocale && recentBlogLocale !== "en"
-          ? `/${recentBlogLocale}/blog/${blogEntry.id.replace(/^fr\//, "")}/`
-          : `/blog/${blogEntry.id.replace(/^en\//, "")}/`}
+          ? `/${recentBlogLocale}/blog/${baseSlug}/`
+          : `/blog/${baseSlug}/`}
         title="Read More"
         data-astro-prefetch
       />

@@ -24,26 +24,48 @@ const featuresTabsContent = await getFeaturesTabsContent();
 const testimonialsContent = await getTestimonialsContent();
 const faqContent = await getFAQContent();
 const ctaContent = await getCTAContent();
+// Safe wrappers to avoid calling .map on undefined in child components and normalize props
+const safeClientsContent = {
+  ...clientsContent,
+  partners: Array.isArray(clientsContent?.partners) ? clientsContent.partners : [],
+};
+
+const safeFeaturesGeneralContent = {
+  title: featuresGeneralContent?.title ?? "",
+  subTitle: featuresGeneralContent?.subTitle ?? "",
+  src: featuresGeneralContent?.src ?? featuresGeneralContent?.image ?? "",
+  alt: featuresGeneralContent?.imageAlt ?? featuresGeneralContent?.alt ?? "",
+  features: Array.isArray(featuresGeneralContent?.features)
+    ? featuresGeneralContent.features
+    : [],
+};
+
+const safeFeaturesTabs = {
+  title: featuresTabsContent?.title ?? "",
+  tabs: Array.isArray(featuresTabsContent?.tabs) ? featuresTabsContent.tabs : [],
+};
+
+const safeFaqContent = {
+  title: faqContent?.title ?? "",
+  faqs: {
+    subTitle: faqContent?.faqs?.subTitle ?? "",
+    faqs: Array.isArray(faqContent?.faqs?.faqs) ? faqContent.faqs.faqs : [],
+  },
+};
 ---
 
 <MainLayout>
   <HeroSection {...heroContent} />
 
-  <ClientsSection {...clientsContent} />
+  <ClientsSection {...safeClientsContent} />
 
-  <FeaturesGeneral
-    title={featuresGeneralContent.title}
-    subTitle={featuresGeneralContent.subTitle}
-    src={featuresGeneralContent.image}
-    alt={featuresGeneralContent.imageAlt}
-    features={featuresGeneralContent.features}
-  />
+  <FeaturesGeneral {...safeFeaturesGeneralContent} />
 
-  <FeaturesNavs {...featuresTabsContent} />
+  <FeaturesNavs {...safeFeaturesTabs} />
 
   <TestimonialsSection {...testimonialsContent} />
 
-  <FAQ {...faqContent} />
+  <FAQ {...safeFaqContent} />
 
   <HeroSectionAlt {...ctaContent} />
 </MainLayout>

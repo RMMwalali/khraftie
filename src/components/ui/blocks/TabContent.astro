@@ -25,6 +25,15 @@ const secondClass = second
   ? "shadow-xl aspect-5/4 bg-neutral-300 dark:bg-neutral-600 object-cover p-3 lg:aspect-auto shadow-neutral-200 rounded-xl dark:shadow-neutral-900/[.2]"
   : "shadow-xl aspect-3/2 object-cover lg:aspect-auto shadow-neutral-200 rounded-xl dark:shadow-neutral-900/[.2]";
 
+// Determine if `src` is an Astro ImageMetadata (imported image) vs. a URL/string or CMS object
+const isImageMetadata =
+  src && typeof src === 'object' && typeof src.src === 'string' && typeof src.width === 'number' && typeof src.height === 'number';
+
+// Try to extract a usable URL string from various CMS-like shapes when not ImageMetadata
+const stringUrl = typeof src === 'string'
+  ? src
+  : (src?.url ?? src?.imgix_url ?? src?.image?.url ?? src?.image?.imgix_url ?? src?.media?.url ?? src?.media?.imgix_url ?? null);
+
 /*
 first: This property should be set to true for the initial TabContent component
 in your list to ensure that it's visible when the page first loads.
@@ -44,21 +53,9 @@ This is the full example:
 
 <!-- Container for tab content that controls visibility and accessibility -->
 <div id={id} role="tabpanel" class={firstClass} aria-labelledby={aria}>
-  <!-- Use img tag for string URLs, Image component for imported images -->
+  <!-- Prefer astro:assets Image for imported metadata; otherwise fall back to plain img with URL -->
   {
-    src && typeof src === 'string' ? (
-      <img
-        src={src}
-        alt={alt}
-        class={secondClass}
-        width={width}
-        height={height}
-        draggable="false"
-        loading={first ? "eager" : "lazy"}
-        fetchpriority={first ? "high" : undefined}
-        decoding="async"
-      />
-    ) : src && typeof src === 'object' ? (
+    isImageMetadata ? (
       <Image
         src={src}
         alt={alt}
@@ -71,6 +68,18 @@ This is the full example:
         fetchpriority={first ? "high" : undefined}
         decoding={"async"}
         sizes={"(min-width: 1024px) 50vw, 100vw"}
+      />
+    ) : stringUrl ? (
+      <img
+        src={stringUrl}
+        alt={alt}
+        class={secondClass}
+        width={width}
+        height={height}
+        draggable="false"
+        loading={first ? "eager" : "lazy"}
+        fetchpriority={first ? "high" : undefined}
+        decoding="async"
       />
     ) : null
   }

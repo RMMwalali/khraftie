@@ -4,31 +4,34 @@ import MainLayout from "@/layouts/MainLayout.astro";
 import CardBlog from "@components/ui/cards/CardBlog.astro";
 import CardBlogRecent from "@components/ui/cards/CardBlogRecent.astro";
 import CardInsight from "@components/ui/cards/CardInsight.astro";
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
 import { SITE } from "@data/constants";
-import { getBlogContent } from "@/lib/cosmic.js";
+import { getBlogContent, getPosts } from "@/lib/cosmic.js";
 
-// Get all blogs post in English and sort them based on publish date
+const cosmicBlogPostsAll = await getPosts({ category: "blog" });
+const cosmicInsightsAll = await getPosts({ category: "insights" });
 
-const englishBlogEntries = await getCollection("blog", ({ id }) => {
-  return id.startsWith("en/");
-});
+console.log('[blog/index] cosmicBlogPostsAll count:', Array.isArray(cosmicBlogPostsAll) ? cosmicBlogPostsAll.length : 'not-array')
+if (Array.isArray(cosmicBlogPostsAll)) {
+  console.log('[blog/index] cosmicBlogPostsAll sample:', cosmicBlogPostsAll.slice(0, 10).map((p) => ({ slug: p?.slug, category: p?.category, title: p?.title })))
+}
+console.log('[blog/index] cosmicInsightsAll count:', Array.isArray(cosmicInsightsAll) ? cosmicInsightsAll.length : 'not-array')
+if (Array.isArray(cosmicInsightsAll)) {
+  console.log('[blog/index] cosmicInsightsAll sample:', cosmicInsightsAll.slice(0, 10).map((p) => ({ slug: p?.slug, category: p?.category, title: p?.title })))
+}
 
-const englishInsightsEntries = await getCollection("insights", ({ id }) => {
-  return id.startsWith("en/");
-});
+const blogPosts: any[] = Array.isArray(cosmicBlogPostsAll)
+  ? cosmicBlogPostsAll.filter((p: any) => typeof p?.slug === "string" && p.slug.startsWith("blog-"))
+  : [];
 
-const blogPosts: CollectionEntry<"blog">[] = englishBlogEntries.sort(
-  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
-    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-// Get all insights posts
-const insightPosts: CollectionEntry<"insights">[] = englishInsightsEntries;
+const insightPosts: any[] = Array.isArray(cosmicInsightsAll)
+  ? cosmicInsightsAll.filter((p: any) => typeof p?.slug === "string" && p.slug.startsWith("insight-"))
+  : [];
 
-// Separate the most recent post from others
-const mostRecentPost: CollectionEntry<"blog"> | undefined = blogPosts[0];
-const otherPosts: CollectionEntry<"blog">[] = blogPosts.slice(1);
+blogPosts.sort((a, b) => (new Date(b?.pubDate || 0).valueOf()) - (new Date(a?.pubDate || 0).valueOf()));
+
+// Separate the most recent blog post from others
+const mostRecentPost: any | undefined = blogPosts[0];
+const otherPosts: any[] = blogPosts.slice(1);
 
 const blogContent = await getBlogContent();
 

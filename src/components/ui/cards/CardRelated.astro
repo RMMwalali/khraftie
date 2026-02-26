@@ -5,6 +5,16 @@ import { formatDate } from "@utils/utils";
 import type { CollectionEntry } from "astro:content";
 
 const { blogEntry, recentBlogLocale = "" } = Astro.props;
+const data = blogEntry?.data ?? blogEntry;
+const imgSrc = data?.cardImage;
+const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
+const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
+const entryId = blogEntry?.id;
+const baseSlug = typeof blogEntry?.slug === 'string'
+  ? blogEntry.slug
+  : (typeof entryId === 'string'
+    ? entryId.replace(/^en\//, "").replace(/^fr\//, "")
+    : (typeof data?.slug === 'string' ? data.slug : ""));
 
 interface Props {
   blogEntry: CollectionEntry<"blog">;
@@ -15,32 +25,42 @@ interface Props {
 <a
   class="group block rounded-xl ring-purple-500 outline-hidden transition duration-300 focus-visible:ring-3 dark:ring-purple-200 dark:focus:outline-hidden"
   href={recentBlogLocale && recentBlogLocale !== "en"
-    ? `/${recentBlogLocale}/blog/${blogEntry.id.replace(/^fr\//, "")}/`
-    : `/blog/${blogEntry.id.replace(/^en\//, "")}/`}
+    ? `/${recentBlogLocale}/blog/${baseSlug}/`
+    : `/blog/${baseSlug}/`}
   data-astro-prefetch
 >
   <div>
-    {blogEntry.data.cardImage && (
-      <Image
-        class="aspect-video rounded-xl"
-        src={blogEntry.data.cardImage}
-        alt={blogEntry.data.cardImageAlt || ""}
-        draggable={"false"}
-        format={"avif"}
-        loading={"lazy"}
-        decoding={"async"}
-        sizes={"(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 100vw"}
-      />
+    {imgSrc && (
+      isImageMetadata ? (
+        <Image
+          class="aspect-video rounded-xl"
+          src={imgSrc}
+          alt={data?.cardImageAlt || ""}
+          draggable={"false"}
+          format={"avif"}
+          loading={"lazy"}
+          decoding={"async"}
+          sizes={"(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 100vw"}
+        />
+      ) : stringUrl ? (
+        <img
+          class="aspect-video rounded-xl object-cover"
+          src={stringUrl}
+          alt={data?.cardImageAlt || ""}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : null
     )}
     <!-- The title of the blog post -->
     <h3
       class="mt-2 text-lg font-medium text-balance text-neutral-800 group-hover:text-violet-400 dark:text-neutral-300 dark:group-hover:text-neutral-50"
     >
-      {blogEntry.data.title}
+      {data.title}
     </h3>
     <!-- The formatted publication date of the blog post -->
     <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-      {formatDate(blogEntry.data.pubDate)}
+      {formatDate(data.pubDate)}
     </p>
   </div></a
 >

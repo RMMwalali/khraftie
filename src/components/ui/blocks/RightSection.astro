@@ -15,6 +15,18 @@ const {
   imgTwo,
   imgTwoAlt,
 } = Astro.props;
+// Detect if images are Astro ImageMetadata vs URL/string or CMS object
+const isImageMetadataOne =
+  imgOne && typeof imgOne === 'object' && typeof imgOne.src === 'string' && typeof imgOne.width === 'number' && typeof imgOne.height === 'number';
+const urlOne = typeof imgOne === 'string'
+  ? imgOne
+  : (imgOne?.url ?? imgOne?.imgix_url ?? imgOne?.image?.url ?? imgOne?.image?.imgix_url ?? imgOne?.media?.url ?? imgOne?.media?.imgix_url ?? null);
+
+const isImageMetadataTwo =
+  imgTwo && typeof imgTwo === 'object' && typeof imgTwo.src === 'string' && typeof imgTwo.width === 'number' && typeof imgTwo.height === 'number';
+const urlTwo = typeof imgTwo === 'string'
+  ? imgTwo
+  : (imgTwo?.url ?? imgTwo?.imgix_url ?? imgTwo?.image?.url ?? imgTwo?.image?.imgix_url ?? imgTwo?.media?.url ?? imgTwo?.media?.imgix_url ?? null);
 // Define TypeScript interface for the properties
 interface Props {
   title: string;
@@ -54,43 +66,77 @@ interface Props {
     single && imgOne ? (
       <div class="mt-8">
         <!-- Single image -->
-        <Image
-          class="w-full rounded-lg"
-          src={imgOne}
-          alt={imgOneAlt}
-          format={"avif"}
-          loading={"lazy"}
-          decoding={"async"}
-          sizes={"(min-width: 1024px) 50vw, 100vw"}
-        />
+        {
+          isImageMetadataOne ? (
+            <Image
+              class="w-full rounded-lg"
+              src={imgOne}
+              alt={imgOneAlt}
+              format={"avif"}
+              loading={"lazy"}
+              decoding={"async"}
+              sizes={"(min-width: 1024px) 50vw, 100vw"}
+            />
+          ) : urlOne ? (
+            <img
+              class="w-full rounded-lg"
+              src={urlOne}
+              alt={imgOneAlt}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : null
+        }
       </div>
     ) : imgOne || imgTwo ? (
       <div class="mt-8 grid grid-cols-2 gap-4">
         <!-- First image in a two-image layout -->
         {imgOne && (
-          <Image
-            class="w-full rounded-xl"
-            src={imgOne}
-            alt={imgOneAlt}
-            draggable={"false"}
-            format={"avif"}
-            loading={"lazy"}
-            decoding={"async"}
-            sizes={"(min-width: 1024px) 25vw, 50vw"}
-          />
+          isImageMetadataOne ? (
+            <Image
+              class="w-full rounded-xl"
+              src={imgOne}
+              alt={imgOneAlt}
+              draggable={"false"}
+              format={"avif"}
+              loading={"lazy"}
+              decoding={"async"}
+              sizes={"(min-width: 1024px) 25vw, 50vw"}
+            />
+          ) : urlOne ? (
+            <img
+              class="w-full rounded-xl"
+              src={urlOne}
+              alt={imgOneAlt}
+              draggable="false"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : null
         )}
         <!-- Second image in a two-image layout -->
         {imgTwo && (
-          <Image
-            class="mt-4 w-full rounded-xl lg:mt-10"
-            src={imgTwo}
-            alt={imgTwoAlt}
-            draggable={"false"}
-            format={"avif"}
-            loading={"lazy"}
-            decoding={"async"}
-            sizes={"(min-width: 1024px) 25vw, 50vw"}
-          />
+          isImageMetadataTwo ? (
+            <Image
+              class="mt-4 w-full rounded-xl lg:mt-10"
+              src={imgTwo}
+              alt={imgTwoAlt}
+              draggable={"false"}
+              format={"avif"}
+              loading={"lazy"}
+              decoding={"async"}
+              sizes={"(min-width: 1024px) 25vw, 50vw"}
+            />
+          ) : urlTwo ? (
+            <img
+              class="mt-4 w-full rounded-xl lg:mt-10"
+              src={urlTwo}
+              alt={imgTwoAlt}
+              draggable="false"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : null
         )}
       </div>
     ) : null

@@ -1,5 +1,6 @@
 ---
 const { title, subTitle, partners } = Astro.props;
+const safePartners = Array.isArray(partners) ? partners : [];
 
 interface Partner {
   icon: string;
@@ -41,9 +42,9 @@ interface Props {
     >
       {
         // Duplicate the partner list for a seamless loop.
-        [...partners, ...partners].map((partner, index) => (
+        [...safePartners, ...safePartners].map((partner, index) => (
           <a
-            href={partner.href}
+            href={partner.href || "#"}
             target="_blank"
             rel="noopener noreferrer"
             class="flex-shrink-0"

@@ -11,7 +11,8 @@
     "setup-cosmic": "node setup-cosmic-content.mjs",
     "quick-setup": "node quick-setup-cosmic.mjs",
     "audit-cosmic": "node audit-cosmic.mjs",
-    "test-cosmic": "node test-cosmic.mjs"
+    "test-cosmic": "node test-cosmic.mjs",
+    "provision-cosmic": "node provision-cosmic.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",
     "astro-vtbot": "^2.1.1",
+    "gray-matter": "^4.0.3",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.11",

@@ -5,10 +5,16 @@ import NavLink from "@components/ui/links/NavLink.astro";
 import enStrings from "@utils/navigation.ts";
 import frStrings from "@utils/fr/navigation.ts";
 import Logo from "@images/stilliconn.png";
+import { getNavContent } from "@/lib/cosmic.js";
 
 // Select the correct translation based on the page's lang prop:
 const strings = Astro.currentLocale === "fr" ? frStrings : enStrings;
 const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
+const cosmicNav = await getNavContent();
+const navLinks = (Array.isArray(cosmicNav.links) && cosmicNav.links.length)
+  ? cosmicNav.links
+  : strings.navBarLinks;
+const logoUrl = cosmicNav.logoUrl;
 ---
 
 <!-- Main header component -->
@@ -27,7 +33,7 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
         href={homeUrl}
         aria-label="Brand"
       >
-        <img src={Logo.src} alt="Brand Logo" class="h-auto w-32" />
+        <img src={logoUrl || Logo.src} alt={logoUrl ? "Brand Logo" : "StillCraft Events Logo"} class="h-auto w-32" />
       </a>
       <!-- Collapse toggle for smaller screens -->
       <div class="mr-5 ml-auto md:hidden">
@@ -85,7 +91,7 @@ const homeUrl = Astro.currentLocale === "fr" ? "/fr" : "/";
       >
         <!-- Navigation links and Authentication component -->
         {
-          strings.navBarLinks.map((link) => (
+          navLinks.map((link) => (
             <NavLink url={link.url} name={link.name} />
           ))
         }

@@ -19,36 +19,57 @@ import { getServicesContent } from "../lib/cosmic.js";
 // Fetch content from Cosmic (with JSON fallback)
 const servicesContent = await getServicesContent();
 
-// Map services data to include actual image imports
+// Map services data to include actual image imports for local fallback assets,
+// but prefer CMS URLs if provided and not matching known local assets.
 const articles = servicesContent.services.map((service: any) => {
-  // Map image paths to actual imports
-  let img = null;
-  let imgOne = null;
-  
-  if (service.img) {
+  const pickUrl = (val: any) => typeof val === 'string' ? val : (val?.url ?? val?.imgix_url ?? val?.image?.url ?? val?.image?.imgix_url ?? val?.media?.url ?? val?.media?.imgix_url ?? null);
+
+  let imgImported = null;
+  let imgOneImported = null;
+  let imgTwoImported = null;
+
+  if (service.img && typeof service.img === 'string') {
     const imgName = service.img.split('/').pop();
-    if (imgName === 'livingstatues.jpg') img = livingstatues;
-    else if (imgName === 'creativeconcept.png') img = creativeconcept;
-    else if (imgName === 'brandambassador.png') img = brandAmbassador;
-    else if (imgName === 'sciencesafari.png') img = sciencesafari;
-    else if (imgName === 'eventplanning.jpg') img = eventplanning;
-    else if (imgName === 'equipmentHire.png') img = equipmentHire;
+    if (imgName === 'livingstatues.jpg') imgImported = livingstatues;
+    else if (imgName === 'creativeconcept.png') imgImported = creativeconcept;
+    else if (imgName === 'brandambassador.png') imgImported = brandAmbassador;
+    else if (imgName === 'sciencesafari.png') imgImported = sciencesafari;
+    else if (imgName === 'eventplanning.jpg') imgImported = eventplanning;
+    else if (imgName === 'equipmentHire.png') imgImported = equipmentHire;
   }
-  
-  if (service.imgOne) {
+
+  if (service.imgOne && typeof service.imgOne === 'string') {
     const imgName = service.imgOne.split('/').pop();
-    if (imgName === 'livingstatues.jpg') imgOne = livingstatues;
-    else if (imgName === 'creativeconcept.png') imgOne = creativeconcept;
-    else if (imgName === 'brandambassador.png') imgOne = brandAmbassador;
-    else if (imgName === 'sciencesafari.png') imgOne = sciencesafari;
-    else if (imgName === 'eventplanning.jpg') imgOne = eventplanning;
-    else if (imgName === 'equipmentHire.png') imgOne = equipmentHire;
+    if (imgName === 'livingstatues.jpg') imgOneImported = livingstatues;
+    else if (imgName === 'creativeconcept.png') imgOneImported = creativeconcept;
+    else if (imgName === 'brandambassador.png') imgOneImported = brandAmbassador;
+    else if (imgName === 'sciencesafari.png') imgOneImported = sciencesafari;
+    else if (imgName === 'eventplanning.jpg') imgOneImported = eventplanning;
+    else if (imgName === 'equipmentHire.png') imgOneImported = equipmentHire;
   }
-  
+
+  if (service.imgTwo && typeof service.imgTwo === 'string') {
+    const imgName = service.imgTwo.split('/').pop();
+    if (imgName === 'livingstatues.jpg') imgTwoImported = livingstatues;
+    else if (imgName === 'creativeconcept.png') imgTwoImported = creativeconcept;
+    else if (imgName === 'brandambassador.png') imgTwoImported = brandAmbassador;
+    else if (imgName === 'sciencesafari.png') imgTwoImported = sciencesafari;
+    else if (imgName === 'eventplanning.jpg') imgTwoImported = eventplanning;
+    else if (imgName === 'equipmentHire.png') imgTwoImported = equipmentHire;
+  }
+
+  const img = imgImported ?? pickUrl(service.img);
+  const imgOne = imgOneImported ?? pickUrl(service.imgOne);
+  const imgTwo = imgTwoImported ?? pickUrl(service.imgTwo);
+
   return {
     ...service,
     img,
-    imgOne
+    imgOne,
+    imgTwo,
+    imgAlt: service.imgAlt || service.title || "Service image",
+    imgOneAlt: service.imgOneAlt || service.title || "Service image",
+    imgTwoAlt: service.imgTwoAlt || service.title || "Service image",
   };
 });
 

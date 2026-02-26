@@ -5,6 +5,10 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 
 const { blogEntry } = Astro.props;
+const data = blogEntry?.data ?? blogEntry;
+const imgSrc = data?.authorImage;
+const isImageMetadata = imgSrc && typeof imgSrc === 'object' && typeof imgSrc.src === 'string' && typeof imgSrc.width === 'number' && typeof imgSrc.height === 'number';
+const stringUrl = typeof imgSrc === 'string' ? imgSrc : (imgSrc?.url ?? imgSrc?.imgix_url ?? imgSrc?.image?.url ?? imgSrc?.image?.imgix_url ?? imgSrc?.media?.url ?? imgSrc?.media?.imgix_url ?? null);
 
 interface Props {
   blogEntry: CollectionEntry<"blog">;
@@ -12,15 +16,25 @@ interface Props {
 ---
 
 <div class="shrink-0">
-  {blogEntry.data.authorImage && (
-    <Image
-      class="size-[46px] rounded-full border-2 border-neutral-50"
-      src={blogEntry.data.authorImage}
-      alt={blogEntry.data.authorImageAlt || ""}
-      draggable={"false"}
-      format={"avif"}
-      loading={"lazy"}
-      decoding={"async"}
-    />
+  {imgSrc && (
+    isImageMetadata ? (
+      <Image
+        class="size-[46px] rounded-full border-2 border-neutral-50"
+        src={imgSrc}
+        alt={data?.authorImageAlt || ""}
+        draggable={"false"}
+        format={"avif"}
+        loading={"lazy"}
+        decoding={"async"}
+      />
+    ) : stringUrl ? (
+      <img
+        class="size-[46px] rounded-full border-2 border-neutral-50"
+        src={stringUrl}
+        alt={data?.authorImageAlt || ""}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : null
   )}
 </div>
