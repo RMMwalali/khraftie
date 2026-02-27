@@ -9,11 +9,12 @@ const PRIVATE_READ = import.meta.env.COSMIC_READ_KEY
 const BUCKET_SLUG = PUBLIC_BUCKET || PRIVATE_BUCKET
 const READ_KEY = PUBLIC_READ || PRIVATE_READ
 
-// Initialize Cosmic client
-const cosmic = createBucketClient({
-  bucketSlug: BUCKET_SLUG,
-  readKey: READ_KEY
-})
+// Initialize Cosmic client lazily (avoids build-time env capture issues on some deploy targets)
+function getCosmicClient() {
+  const bucketSlug = import.meta.env.PUBLIC_COSMIC_BUCKET_SLUG || import.meta.env.COSMIC_BUCKET_SLUG
+  const readKey = import.meta.env.PUBLIC_COSMIC_READ_KEY || import.meta.env.COSMIC_READ_KEY
+  return createBucketClient({ bucketSlug, readKey })
+}
 
 // Import JSON fallbacks
 import heroJson from '../content/homepage/hero.json'
@@ -87,7 +88,17 @@ async function fetchWithFallback(cosmicQuery, fallbackData) {
       return fallbackData
     }
 
-    const data = await cosmicQuery()
+    // Safe diagnostics (never logs keys)
+    if (import.meta.env.PROD) {
+      console.warn('[cosmic] prod fetch attempt', {
+        hasBucket: Boolean(BUCKET_SLUG),
+        hasReadKey: Boolean(READ_KEY),
+        bucketSlug: BUCKET_SLUG || null,
+      })
+    }
+
+    const cosmic = getCosmicClient()
+    const data = await cosmicQuery(cosmic)
     return data
   } catch (error) {
     const errorMessage = error?.message || 'Unknown error'
@@ -111,8 +122,9 @@ async function fetchWithFallback(cosmicQuery, fallbackData) {
 }
 
 // Graceful wrappers that don't throw on common "not found" cases
-async function safeFind(params) {
+async function safeFind(params, cosmicClient) {
   try {
+    const cosmic = cosmicClient || getCosmicClient()
     const data = await cosmic.objects.find(params).props('slug,id,metadata')
     return data
   } catch (err) {
@@ -124,8 +136,9 @@ async function safeFind(params) {
   }
 }
 
-async function safeFindOne(params) {
+async function safeFindOne(params, cosmicClient) {
   try {
+    const cosmic = cosmicClient || getCosmicClient()
     const data = await cosmic.objects.findOne(params).props('slug,id,metadata')
     return data
   } catch (err) {
@@ -182,9 +195,9 @@ export function normalizeCosmicPost(post) {
 export async function getPosts(options = {}) {
   const { category } = options
   return fetchWithFallback(
-    async () => {
+    async (cosmic) => {
       // Prefer unified 'posts' type
-      const data = await safeFind({ type: 'posts' })
+      const data = await safeFind({ type: 'posts' }, cosmic)
       if (data.objects && data.objects.length > 0) {
         let posts = data.objects
         if (category) {
@@ -194,7 +207,7 @@ export async function getPosts(options = {}) {
       }
 
       // Fallback to legacy 'blog-posts' type (treated as category 'blog')
-      const legacy = await safeFind({ type: 'blog-posts' })
+      const legacy = await safeFind({ type: 'blog-posts' }, cosmic)
       if (!legacy.objects || legacy.objects.length === 0) return []
       let posts = legacy.objects.map((obj) => ({ ...normalizeCosmicPost(obj), category: 'blog' }))
       if (category && String(category).toLowerCase() !== 'blog') {
@@ -208,12 +221,12 @@ export async function getPosts(options = {}) {
 
 export async function getPost(slug) {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'posts', slug })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'posts', slug }, cosmic)
       if (data.object) return normalizeCosmicPost(data.object)
 
       // Fallback to legacy 'blog-posts'
-      const legacy = await safeFindOne({ type: 'blog-posts', slug })
+      const legacy = await safeFindOne({ type: 'blog-posts', slug }, cosmic)
       if (!legacy.object) return null
       return { ...normalizeCosmicPost(legacy.object), category: 'blog' }
     },
@@ -224,10 +237,10 @@ export async function getPost(slug) {
 // About page gallery content
 export async function getAboutGallery() {
   return fetchWithFallback(
-    async () => {
-      let data = await safeFindOne({ type: 'about-gallery', slug: 'about-gallery' })
+    async (cosmic) => {
+      let data = await safeFindOne({ type: 'about-gallery', slug: 'about-gallery' }, cosmic)
       if (!data.object) {
-        const list = await safeFind({ type: 'about-gallery' })
+        const list = await safeFind({ type: 'about-gallery' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           data = { object: list.objects[0] }
         }
@@ -256,11 +269,11 @@ export async function getAboutGallery() {
 // Hero content
 export async function getHeroContent() {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'hero-content', slug: 'homepage-hero' })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'hero-content', slug: 'homepage-hero' }, cosmic)
       if (!data.object) {
         // fallback: get first object of this type
-        const list = await safeFind({ type: 'hero-content' })
+        const list = await safeFind({ type: 'hero-content' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           return list.objects[0].metadata
         }
@@ -288,10 +301,10 @@ export async function getHeroContent() {
 // Clients content
 export async function getClientsContent() {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'clients-content', slug: 'homepage-clients' })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'clients-content', slug: 'homepage-clients' }, cosmic)
       if (!data.object) {
-        const list = await safeFind({ type: 'clients-content' })
+        const list = await safeFind({ type: 'clients-content' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           const metadata = list.objects[0].metadata
           if (metadata.partners && Array.isArray(metadata.partners)) {
@@ -319,10 +332,10 @@ export async function getClientsContent() {
 // Features General content
 export async function getFeaturesGeneralContent() {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'features-general', slug: 'homepage-features-general' })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'features-general', slug: 'homepage-features-general' }, cosmic)
       if (!data.object) {
-        const list = await safeFind({ type: 'features-general' })
+        const list = await safeFind({ type: 'features-general' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           const metadata = list.objects[0].metadata
           if (metadata.image) {
@@ -349,10 +362,10 @@ export async function getFeaturesGeneralContent() {
 // Features Tabs content
 export async function getFeaturesTabsContent() {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'features-tabs', slug: 'homepage-features-tabs' })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'features-tabs', slug: 'homepage-features-tabs' }, cosmic)
       if (!data.object) {
-        const list = await safeFind({ type: 'features-tabs' })
+        const list = await safeFind({ type: 'features-tabs' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           const md = list.objects[0].metadata || {}
           const rawTabs = Array.isArray(md.tabs) ? md.tabs : []
@@ -394,10 +407,10 @@ export async function getFeaturesTabsContent() {
 // Testimonials content
 export async function getTestimonialsContent() {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'testimonials', slug: 'homepage-testimonials' })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'testimonials', slug: 'homepage-testimonials' }, cosmic)
       if (!data.object) {
-        const list = await safeFind({ type: 'testimonials' })
+        const list = await safeFind({ type: 'testimonials' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           const md = list.objects[0].metadata || {}
           const raw = Array.isArray(md.testimonials) ? md.testimonials : []
@@ -437,10 +450,10 @@ export async function getTestimonialsContent() {
 // FAQ content
 export async function getFAQContent() {
   return fetchWithFallback(
-    async () => {
-      let data = await safeFindOne({ type: 'faq', slug: 'homepage-faq' })
+    async (cosmic) => {
+      let data = await safeFindOne({ type: 'faq', slug: 'homepage-faq' }, cosmic)
       if (!data.object) {
-        const list = await safeFind({ type: 'faq' })
+        const list = await safeFind({ type: 'faq' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           data = { object: list.objects[0] }
         }
@@ -490,19 +503,19 @@ export async function getFAQContent() {
 // CTA content
 export async function getCTAContent() {
   return fetchWithFallback(
-    async () => {
+    async (cosmic) => {
       // Primary type
-      let data = await safeFindOne({ type: 'cta', slug: 'homepage-cta' })
+      let data = await safeFindOne({ type: 'cta', slug: 'homepage-cta' }, cosmic)
       if (!data.object) {
         // Try alternate naming used in your bucket
-        data = await safeFindOne({ type: 'call-to-action', slug: 'homepage-cta' })
+        data = await safeFindOne({ type: 'call-to-action', slug: 'homepage-cta' }, cosmic)
       }
       if (!data.object) {
-        const list = await safeFind({ type: 'cta' })
+        const list = await safeFind({ type: 'cta' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           return list.objects[0].metadata
         }
-        const listAlt = await safeFind({ type: 'call-to-action' })
+        const listAlt = await safeFind({ type: 'call-to-action' }, cosmic)
         if (Array.isArray(listAlt.objects) && listAlt.objects.length > 0) {
           return listAlt.objects[0].metadata
         }
@@ -518,19 +531,19 @@ export async function getCTAContent() {
 // About page content
 export async function getAboutContent() {
   return fetchWithFallback(
-    async () => {
+    async (cosmic) => {
       // Primary type
-      let data = await safeFindOne({ type: 'about-content', slug: 'about-page' })
+      let data = await safeFindOne({ type: 'about-content', slug: 'about-page' }, cosmic)
       if (!data.object) {
         // Try alternate naming used in your bucket
-        data = await safeFindOne({ type: 'about-page-content', slug: 'about-page' })
+        data = await safeFindOne({ type: 'about-page-content', slug: 'about-page' }, cosmic)
       }
       if (!data.object) {
-        const list = await safeFind({ type: 'about-content' })
+        const list = await safeFind({ type: 'about-content' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           return list.objects[0].metadata
         }
-        const listAlt = await safeFind({ type: 'about-page-content' })
+        const listAlt = await safeFind({ type: 'about-page-content' }, cosmic)
         if (Array.isArray(listAlt.objects) && listAlt.objects.length > 0) {
           return listAlt.objects[0].metadata
         }
@@ -572,19 +585,19 @@ export async function getAboutContent() {
 // Services page content
 export async function getServicesContent() {
   return fetchWithFallback(
-    async () => {
+    async (cosmic) => {
       // Primary type
-      let data = await safeFindOne({ type: 'services-content', slug: 'services-page' })
+      let data = await safeFindOne({ type: 'services-content', slug: 'services-page' }, cosmic)
       if (!data.object) {
         // Try alternate naming used in your bucket
-        data = await safeFindOne({ type: 'services-page-content', slug: 'services-page' })
+        data = await safeFindOne({ type: 'services-page-content', slug: 'services-page' }, cosmic)
       }
       if (!data.object) {
-        const list = await safeFind({ type: 'services-content' })
+        const list = await safeFind({ type: 'services-content' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           return list.objects[0].metadata
         }
-        const listAlt = await safeFind({ type: 'services-page-content' })
+        const listAlt = await safeFind({ type: 'services-page-content' }, cosmic)
         if (Array.isArray(listAlt.objects) && listAlt.objects.length > 0) {
           return listAlt.objects[0].metadata
         }
@@ -630,19 +643,19 @@ export async function getServicesContent() {
 // Contact page content
 export async function getContactContent() {
   return fetchWithFallback(
-    async () => {
+    async (cosmic) => {
       // Primary type
-      let data = await safeFindOne({ type: 'contact-content', slug: 'contact-page' })
+      let data = await safeFindOne({ type: 'contact-content', slug: 'contact-page' }, cosmic)
       if (!data.object) {
         // Try alternate naming used in your bucket
-        data = await safeFindOne({ type: 'contact-page-content', slug: 'contact-page' })
+        data = await safeFindOne({ type: 'contact-page-content', slug: 'contact-page' }, cosmic)
       }
       if (!data.object) {
-        const list = await safeFind({ type: 'contact-content' })
+        const list = await safeFind({ type: 'contact-content' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           return list.objects[0].metadata
         }
-        const listAlt = await safeFind({ type: 'contact-page-content' })
+        const listAlt = await safeFind({ type: 'contact-page-content' }, cosmic)
         if (Array.isArray(listAlt.objects) && listAlt.objects.length > 0) {
           return listAlt.objects[0].metadata
         }
@@ -658,19 +671,19 @@ export async function getContactContent() {
 // Blog page content
 export async function getBlogContent() {
   return fetchWithFallback(
-    async () => {
+    async (cosmic) => {
       // Primary type
-      let data = await safeFindOne({ type: 'blog-content', slug: 'blog-page' })
+      let data = await safeFindOne({ type: 'blog-content', slug: 'blog-page' }, cosmic)
       if (!data.object) {
         // Try alternate naming used in your bucket
-        data = await safeFindOne({ type: 'blog-page-content', slug: 'blog-page' })
+        data = await safeFindOne({ type: 'blog-page-content', slug: 'blog-page' }, cosmic)
       }
       if (!data.object) {
-        const list = await safeFind({ type: 'blog-content' })
+        const list = await safeFind({ type: 'blog-content' }, cosmic)
         if (Array.isArray(list.objects) && list.objects.length > 0) {
           return list.objects[0].metadata
         }
-        const listAlt = await safeFind({ type: 'blog-page-content' })
+        const listAlt = await safeFind({ type: 'blog-page-content' }, cosmic)
         if (Array.isArray(listAlt.objects) && listAlt.objects.length > 0) {
           return listAlt.objects[0].metadata
         }
@@ -696,8 +709,8 @@ export async function getBlogContent() {
 // Get single blog post by slug
 export async function getBlogPost(slug) {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'blog-posts', slug: slug })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'blog-posts', slug: slug }, cosmic)
       if (!data.object) {
         console.warn(`Blog post ${slug} not found in Cosmic, using content collection fallback`)
         return null
@@ -744,8 +757,8 @@ export function normalizeCosmicBlogPost(post) {
 // Navigation content (site-wide)
 export async function getNavContent() {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'navigation', slug: 'site-navigation' })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'navigation', slug: 'site-navigation' }, cosmic)
       if (!data.object) {
         console.warn('Navigation content not found in Cosmic')
         return { links: [], logoUrl: null }
@@ -766,8 +779,8 @@ export async function getNavContent() {
 // Footer content (site-wide)
 export async function getFooterContent() {
   return fetchWithFallback(
-    async () => {
-      const data = await safeFindOne({ type: 'footer', slug: 'site-footer' })
+    async (cosmic) => {
+      const data = await safeFindOne({ type: 'footer', slug: 'site-footer' }, cosmic)
       if (!data.object) {
         console.warn('Footer content not found in Cosmic')
         return { sections: [], socialLinks: {}, newsletterTitle: null, newsletterContent: null }
