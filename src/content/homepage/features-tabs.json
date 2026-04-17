@@ -5,7 +5,7 @@
       "heading": "Mall Activations",
       "content": "Immersive in-mall experiences that spark interaction, increase dwell time, and elevate shopper journeys. From interactive installations to themed setups, we create activations that captivate.",
       "svg": "tools",
-      "src": "/uploads/creative.png",
+      "src": "https://res.cloudinary.com/di5ohrt1g/image/upload/v1773061959/Easter_Concept-removebg-preview_1_yvmz9u.png",
       "alt": "Interactive mall activation with shoppers engaging",
       "width": 1024,
       "height": 1280,
@@ -15,17 +15,16 @@
       "heading": "Living Statues",
       "content": "Professionally styled performers who become high-impact living visuals. Our human living statues create curiosity, buzz, and shareable moments that draw crowds and elevate brand presence.",
       "svg": "dashboard",
-      "src": "/uploads/coordination.jpg",
+      "src": "https://cdn.cosmicjs.com/1bfe9ed0-1302-11f1-acb0-e5539bfd7de5-b2.jpg",
       "alt": "Human living statue performance at event",
       "width": 1080,
-      "height": 1293,
-      "second": true
+      "height": 1293
     },
     {
       "heading": "Brand Engagement",
       "content": "Human-led, participatory experiences that create meaningful connections between shoppers and brands. From brand ambassadors to interactive challenges, we drive engagement and brand loyalty.",
       "svg": "house",
-      "src": "/uploads/execution.jpg",
+      "src": "https://cdn.cosmicjs.com/13d4c6d0-1302-11f1-acb0-e5539bfd7de5-b3.jpg",
       "alt": "Brand ambassadors engaging with shoppers",
       "width": 1080,
       "height": 1350

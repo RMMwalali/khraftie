@@ -84,7 +84,15 @@ async function fetchWithFallback(cosmicQuery, fallbackData) {
   try {
     // Check if Cosmic credentials are available
     if (!BUCKET_SLUG || !READ_KEY) {
-      console.warn('Cosmic credentials not found, using JSON fallback')
+      console.warn('[cosmic] credentials not found, using JSON fallback')
+      console.warn('[cosmic] env vars check:', {
+        PUBLIC_BUCKET: !!import.meta.env.PUBLIC_COSMIC_BUCKET_SLUG,
+        PRIVATE_BUCKET: !!import.meta.env.COSMIC_BUCKET_SLUG,
+        PUBLIC_READ: !!import.meta.env.PUBLIC_COSMIC_READ_KEY,
+        PRIVATE_READ: !!import.meta.env.COSMIC_READ_KEY,
+        BUCKET_SLUG: BUCKET_SLUG,
+        READ_KEY: READ_KEY ? 'SET' : 'MISSING'
+      })
       return fallbackData
     }
 
